@@ -3,7 +3,7 @@ name = "vacant-back"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "De333mond",email = "91075474+De333mond@users.noreply.github.com"}
+    {name = "De333mond",email = "vladb539@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"

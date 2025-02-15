@@ -1,8 +1,5 @@
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from dotenv import load_dotenv
-
-load_dotenv(".env")
 
 
 class DBSettings(BaseModel):
@@ -33,10 +30,7 @@ class Settings(BaseSettings):
     api: ApiSettings
 
 
-import os
-
-print(os.environ["DB__URL"])
-settings = Settings()
+settings = Settings(_env_file=".env")
 
 if __name__ == "__main__":
     print(settings.model_dump())

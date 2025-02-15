@@ -1,13 +1,14 @@
-from db import BaseModel
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, ForeignKey
 from datetime import datetime
+
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
+
+from src.db import BaseModel
 
 
 class User(BaseModel):
-    fullname: Mapped[str] = mapped_column(String(255))
-    phone: Mapped[str] = mapped_column(String(12))
-    email: Mapped[str] = mapped_column(String(255))
+    phone: Mapped[str]
+
     # TODO: implement real passport fields
     passport_data: Mapped[str]
     group: Mapped[str]
@@ -24,7 +25,7 @@ class Program(BaseModel):
     sem_num: Mapped[int]
     university: Mapped[str]
 
-    application_id: Mapped["Application"] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
 
 
 class Application(BaseModel):
@@ -32,12 +33,12 @@ class Application(BaseModel):
     type: Mapped[str]
 
 
-class ReinsatatementApplication(BaseModel):
+class ReinstatementApplication(BaseModel):
     """
     Восстановление
     """
 
-    application_id: Mapped["Application"] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
     is_vacation_need: Mapped[bool]
     begin_year: Mapped[int]
     end_year: Mapped[int]
@@ -51,7 +52,7 @@ class ChangeApplication(BaseModel):
     Изменение условий обучения
     """
 
-    application_id: Mapped["Application"] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
     purpose: Mapped[str] = mapped_column(String(1023))
 
 
@@ -60,12 +61,12 @@ class TransferApplication(BaseModel):
     Перевод из другого вуза
     """
 
-    application_id: Mapped["Application"] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
     continue_year: Mapped[int]
 
 
 class Documents(BaseModel):
-    application_id: Mapped["Application"] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
     type: Mapped[str]
     title: Mapped[str]
     filepath: Mapped[str]
