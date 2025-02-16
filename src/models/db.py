@@ -23,7 +23,7 @@ session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
     bind=engine,
     autoflush=settings.db.autoflush,
     autocommit=settings.db.autocommit,
-    flush_on_commit=settings.db.flush_on_commit,
+    expire_on_commit=settings.db.expire_on_commit,
 )
 
 

@@ -1,5 +1,14 @@
-from src.schemas.applications.application import BaseApplicationSchema
+from datetime import datetime
+
+from src.schemas.applications.application import CreateApplicationSchema
 
 
-class CreateChangeApplicationSchema(BaseApplicationSchema):
-    pass
+class CreateChangeApplicationSchema(CreateApplicationSchema):
+    change_date: datetime
+    purpose: str
+
+
+class ChangeApplicationSchema(CreateChangeApplicationSchema):
+    id: int
+    type: str
+

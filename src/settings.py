@@ -10,7 +10,7 @@ class DBSettings(BaseModel):
     max_overflow: int = 10
     autoflush: bool = False
     autocommit: bool = False
-    flush_on_commit: bool = False
+    expire_on_commit: bool = False
 
 
 class RunSettigns(BaseModel):

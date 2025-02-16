@@ -1,5 +1,11 @@
-from src.schemas.applications.application import BaseApplicationSchema
+from src.schemas.applications.application import CreateApplicationSchema
 
 
-class CreateTransferApplication(BaseApplicationSchema):
-    pass
+class CreateTransferApplicationSchema(CreateApplicationSchema):
+    continue_year: int
+    paid_policy_accepted: bool
+
+
+class TransferApplicationSchema(CreateTransferApplicationSchema):
+    id: int
+    type: str
