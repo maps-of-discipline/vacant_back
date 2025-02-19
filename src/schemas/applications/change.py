@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pydantic import ConfigDict
+
 from src.schemas.applications.application import CreateApplicationSchema
 
 
@@ -11,4 +13,8 @@ class CreateChangeApplicationSchema(CreateApplicationSchema):
 class ChangeApplicationSchema(CreateChangeApplicationSchema):
     id: int
     type: str
+
+
+
+
 

@@ -1,10 +1,11 @@
 from datetime import datetime
 
-from pydantic import BaseModel, conlist
+from pydantic import BaseModel, ConfigDict
 
 
 class CreateProgramSchema(BaseModel):
     type: str
+    application_id: int
     priority: int | None
     okso: str
     profile: str
@@ -12,6 +13,8 @@ class CreateProgramSchema(BaseModel):
     base: str | None
     sem_num: int | None
     university: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProgramSchema(CreateProgramSchema):
@@ -29,5 +32,4 @@ class CreateApplicationSchema(BaseModel):
 
     programs: list[CreateProgramSchema]
 
-
-
+    model_config = ConfigDict(from_attributes=True)

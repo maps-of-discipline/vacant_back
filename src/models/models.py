@@ -31,25 +31,24 @@ class Program(BaseModel):
     sem_num: Mapped[int | None]
     university: Mapped[str]
 
-    application_id: Mapped[int] = mapped_column(ForeignKey("application.id", ondelete="CASCADE"))
+    application_id: Mapped[int] = mapped_column(
+        ForeignKey("application.id", ondelete="CASCADE")
+    )
 
 
 class Application(BaseModel):
     date: Mapped[datetime] = mapped_column(default=datetime.now)
     type: Mapped[str]
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     hostel_policy_accepted: Mapped[bool]
     vacation_policy_viewed: Mapped[bool]
     no_restrictions_policy_accepted: Mapped[bool]
     reliable_information_policy_accepted: Mapped[bool]
 
-    programs: Mapped[list[Program]] = relationship()
+    programs: Mapped[list[Program]] = relationship(lazy="selectin")
 
-    __mapper_args__ = {
-        "polymorphic_identity": "application",
-        "polymorphic_on": "type"
-    }
+    __mapper_args__ = {"polymorphic_identity": "application", "polymorphic_on": "type"}
 
 
 class ReinstatementApplication(Application):
@@ -57,7 +56,9 @@ class ReinstatementApplication(Application):
     Восстановление
     """
 
-    id: Mapped[int] = mapped_column(ForeignKey("application.id", ondelete="CASCADE"), primary_key=True)
+    id: Mapped[int] = mapped_column(
+        ForeignKey("application.id", ondelete="CASCADE"), primary_key=True
+    )
     is_vacation_need: Mapped[bool]
     begin_year: Mapped[int]
     end_year: Mapped[int]
@@ -65,9 +66,7 @@ class ReinstatementApplication(Application):
 
     paid_policy_accepted: Mapped[bool]
 
-    __mapper_args__ = {
-        "polymorphic_identity": "reinstatement"
-    }
+    __mapper_args__ = {"polymorphic_identity": "reinstatement"}
 
 
 class ChangeApplication(Application):
@@ -75,13 +74,13 @@ class ChangeApplication(Application):
     Изменение условий обучения
     """
 
-    id: Mapped[int] = mapped_column(ForeignKey("application.id", ondelete="CASCADE"), primary_key=True)
+    id: Mapped[int] = mapped_column(
+        ForeignKey("application.id", ondelete="CASCADE"), primary_key=True
+    )
     change_date: Mapped[datetime]
     purpose: Mapped[str] = mapped_column(String(1023))
 
-    __mapper_args__ = {
-        "polymorphic_identity": "change"
-    }
+    __mapper_args__ = {"polymorphic_identity": "change"}
 
 
 class TransferApplication(Application):
@@ -89,14 +88,14 @@ class TransferApplication(Application):
     Перевод из другого вуза
     """
 
-    id: Mapped[int] = mapped_column(ForeignKey("application.id", ondelete="CASCADE"), primary_key=True)
+    id: Mapped[int] = mapped_column(
+        ForeignKey("application.id", ondelete="CASCADE"), primary_key=True
+    )
     continue_year: Mapped[int | None]
 
     paid_policy_accepted: Mapped[bool]
 
-    __mapper_args__ = {
-        "polymorphic_identity": "transfer"
-    }
+    __mapper_args__ = {"polymorphic_identity": "transfer"}
 
 
 class Documents(BaseModel):
