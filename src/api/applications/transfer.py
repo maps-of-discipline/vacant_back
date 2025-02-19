@@ -22,5 +22,5 @@ async def create_transfer_application(
 async def get_transfer_application(
     id: int = Path(), service: TransferApplicationService = Depends()
 ) -> TransferApplicationSchema:
-    pass
-    
+    application = await service.get(id)
+    return application

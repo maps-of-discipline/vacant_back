@@ -5,6 +5,7 @@ from src.schemas.applications.transfer import (
     CreateTransferApplicationSchema,
     TransferApplicationSchema,
 )
+from src.exceptions.general import ItemNotFoundException
 
 
 class TransferApplicationService:
@@ -16,3 +17,11 @@ class TransferApplicationService:
     ) -> TransferApplicationSchema:
         created_application = await self._repo.create(application)
         return created_application
+
+    async def get(self, id: int) -> TransferApplicationSchema:
+        application = await self._repo.get(id)
+        if application is None:
+            raise ItemNotFoundException(
+                f"Transfer application with id[{id}] doesn't exists."
+            )
+        return application

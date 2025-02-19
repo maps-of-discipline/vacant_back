@@ -75,3 +75,7 @@ class TransferApplicationRepository:
         await self.session.commit()
         await self.session.refresh(created_application)
         return self._create_schema(created_application)
+
+    async def get(self, id: int) -> TransferApplicationSchema | None:
+        application = await self.session.get(TransferApplication, id)
+        return None if application is None else self._create_schema(application)
