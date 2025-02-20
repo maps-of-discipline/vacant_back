@@ -48,6 +48,8 @@ class Application(BaseModel):
 
     programs: Mapped[list[Program]] = relationship(lazy="selectin")
 
+    user: Mapped[User] = relationship()
+
     __mapper_args__ = {"polymorphic_identity": "application", "polymorphic_on": "type"}
 
 

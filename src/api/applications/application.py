@@ -1,0 +1,16 @@
+from fastapi import APIRouter, Depends
+from src.schemas.applications.application import ApplicationForListViewSchema
+from src.services.applications.application import ApplicationService
+
+router = APIRouter(prefix="/applications")
+
+
+@router.get(
+    path="/",
+    tags=["application"],
+)
+async def get_all_applications(
+    service: ApplicationService = Depends(),
+) -> list[ApplicationForListViewSchema]:
+    applications = await service.get_all()
+    return applications
