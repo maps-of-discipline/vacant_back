@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import String, ForeignKey, DateTime
+from sqlalchemy import String, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.db import BaseModel
@@ -19,6 +19,35 @@ class User(BaseModel):
 
     # TODO: implement real passport fields
     passport_data: Mapped[str]
+
+    roles: Mapped[list["Role"]] = relationship(secondary="user_has_role")
+
+
+class Role(BaseModel):
+    title: Mapped[str]
+    permissions: Mapped[list["Permission"]] = relationship(
+        secondary="role_has_permission"
+    )
+
+
+class Permission(BaseModel):
+    title: Mapped[str]
+
+
+user_has_role = Table(
+    "user_has_role",
+    BaseModel.metadata,
+    Column("user_id", ForeignKey("user.id")),
+    Column("role_id", ForeignKey("role.id")),
+)
+
+
+role_has_permission = Table(
+    "role_has_permission",
+    BaseModel.metadata,
+    Column("role_id", ForeignKey("role.id")),
+    Column("permission_id", ForeignKey("permission.id")),
+)
 
 
 class Program(BaseModel):

@@ -22,12 +22,18 @@ class ApiSettings(BaseModel):
     prefix: str = "/api"
 
 
+class AdminApi(BaseModel):
+    base_url: str
+    service_title: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_nested_delimiter="__")
 
     db: DBSettings
     run: RunSettigns
     api: ApiSettings
+    admin_api: AdminApi
 
 
 settings = Settings(_env_file=".env")
