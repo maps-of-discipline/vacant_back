@@ -45,3 +45,4 @@ class BaseModel(DeclarativeBase):
     def __camel_to_snake(cls, camel: str) -> str:
         snake_str = re.sub("([a-z0-9])([A-Z])", r"\1_\2", camel).lower()
         return snake_str
+

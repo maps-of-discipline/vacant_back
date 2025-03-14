@@ -1,8 +1,12 @@
+from enum import Enum
+from typing import Type
 from fastapi import Depends
-from sqlalchemy import select
+from pydantic import conbytes
+from sqlalchemy import insert, select
 from sqlalchemy.orm import aliased
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.enums.auth import PermissionsEnum
 from src.models.db import sessionmaker
 from src.models.models import User, Role, Permission
 from src.schemas.auth import PermissionSchema

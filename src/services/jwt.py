@@ -2,6 +2,7 @@ import jwt
 from src.settings import settings
 from src.schemas.auth import JWTPayload
 from time import time
+from src.exceptions.auth import TokenExpiredException
 
 
 class JWTService:
@@ -28,12 +29,16 @@ class JWTService:
         )
 
     def decode(self, token: str) -> JWTPayload:
-        payload = jwt.decode(
-            token,
-            key=self.secret,
-            algorithm=list(self.algorithm),
-            options={
-                "verify_exp": True,
-            },
-        )
+        try:
+            payload = jwt.decode(
+                token,
+                key=self.secret,
+                algorithms=[self.algorithm],
+                options={
+                    "verify_exp": True,
+                },
+            )
+        except jwt.ExpiredSignatureError:
+            raise TokenExpiredException()
+
         return JWTPayload.model_validate(payload)

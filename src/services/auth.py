@@ -9,6 +9,7 @@ from src.repository.permission import PermissionRepository
 from src.repository.roles import RoleRepository
 from src.repository.token import TokenRepository
 from src.services.jwt import JWTService
+from src.enums.auth import PermissionsEnum
 from src.settings import settings
 from src.logger import logger
 
@@ -60,6 +61,26 @@ class AuthService:
                 user.id, admin_api_user_roles
             )
             return user
+
+    async def veryfi_permissions(
+        self,
+        user: UserSchema,
+        has_have: list[PermissionsEnum],
+    ) -> bool:
+        logger.info("veryfing permissions...")
+        permissions = await self.permission_repo.get_user_permissions(user.id)
+
+        has_have_set = set([el.value for el in has_have])
+        permissions_set = set([el.title for el in permissions])
+        res = has_have_set.issubset(permissions_set)
+
+        logger.info("veryfing " + ("successd" if res else "failed"))
+        if not res:
+            logger.debug(
+                f"user has have permissions: {has_have_set} \nbut have: {permissions_set}"
+            )
+
+        return res
 
     async def create_user_tokens(self, user: UserSchema, user_agent: str) -> AuthTokens:
         permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
