@@ -1,6 +1,7 @@
 from fastapi import Depends
 
-from src.schemas.auth import AuthTokens, JWTPayload
+from src.exceptions.auth import InvalidTokenException
+from src.schemas.auth import AuthTokens, JWTPayload, RenewAccessTokenSchema
 from src.schemas.user import AdminApiTokenSchema, UserSchema
 from src.gateways.admin_api import AdminApi
 
@@ -96,3 +97,30 @@ class AuthService:
             access_token=access_token,
             refresh_token=refresh_token,
         )
+
+    async def renew_tokens(
+        self,
+        tokens: RenewAccessTokenSchema,
+        user_agent: str,
+    ) -> AuthTokens:
+        payload = self.jwt.decode(
+            tokens.access_token, options={"verify_signature": True}
+        )
+
+        user = await self.user_repo.get(payload.user_id)
+
+        if not user:
+            raise InvalidTokenException("User not found.")
+        permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
+
+        payload = JWTPayload(user_id=user.id, permissions=permissions)
+        access = self.jwt.encode(payload)
+
+        refresh = await self.token_repo.renew_token(
+            tokens.refresh_token,
+            user.id,
+            user_agent,
+            self.refresh_lifetime,
+        )
+
+        return AuthTokens(access_token=access, refresh_token=refresh)

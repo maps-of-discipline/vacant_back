@@ -17,3 +17,7 @@ class JWTPayload(BaseModel):
 
     class Config:
         extra = "allow"
+
+
+class RenewAccessTokenSchema(AuthTokens):
+    pass

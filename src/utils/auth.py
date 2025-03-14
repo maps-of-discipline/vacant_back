@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
-from fastapi.security import APIKeyHeader, HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from src.schemas.user import UserSchema
 from src.services.auth import AuthService
@@ -24,7 +24,9 @@ class PermissionRequire:
         jwt_service: JWTService = Depends(),
     ) -> UserSchema:
         logger.info("Checking user permissions before request")
-        payload = jwt_service.decode(token.credentials)
+        payload = jwt_service.decode(
+            token.credentials, options={"verify_exp": True, "verify_signature": True}
+        )
 
         logger.debug(f"Users's {payload=}")
         user = await user_repo.get(payload.user_id)
