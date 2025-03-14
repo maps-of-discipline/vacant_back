@@ -1,15 +1,19 @@
 from pydantic import BaseModel
 
 
+class AdminApiTokenSchema(BaseModel):
+    token: str
+
+
 class CreateUserSchema(BaseModel):
     email: str
     name: str
     surname: str
     patronymic: str
-    phone: str
-    shils: str | None
+    phone: str | None
+    snils: str | None
     group: str | None
-    course: str | None
+    course: int | None
     passport_data: str | None
 
 
@@ -19,11 +23,12 @@ class UserForListViewSchema(BaseModel):
     name: str
     surname: str
     patronymic: str
-    phone: str
+    phone: str | None
     group: str | None
     course: int | None
 
 
-class UserSchema(UserForListViewSchema):
-    shils: str | None
-    passport_data: str | None
+class UserSchema(CreateUserSchema):
+    id: int
+    external_id: str
+

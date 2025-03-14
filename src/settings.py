@@ -20,11 +20,27 @@ class RunSettigns(BaseModel):
 
 class ApiSettings(BaseModel):
     prefix: str = "/api"
+    allowed_origins: list[str] = [
+        "http://localhost:7000",
+    ]
 
 
-class AdminApi(BaseModel):
+class AdminApiSettings(BaseModel):
     base_url: str
     service_title: str
+
+
+class AuthSettings(BaseModel):
+    access_token_lifetime: int
+    refresh_token_lifetime: int
+    secret: str
+    algorithm: str = "HS256"
+
+
+class LoggingSettings(BaseModel):
+    level: str = "DEBUG"
+    log_file: str = "logs/app.log"
+    use_file_handler: bool = False
 
 
 class Settings(BaseSettings):
@@ -33,10 +49,12 @@ class Settings(BaseSettings):
     db: DBSettings
     run: RunSettigns
     api: ApiSettings
-    admin_api: AdminApi
+    admin_api: AdminApiSettings
+    auth: AuthSettings
+    logging: LoggingSettings
 
 
-settings = Settings(_env_file=".env")
+settings: Settings = Settings(_env_file=".env")
 
 if __name__ == "__main__":
     print(settings.model_dump())

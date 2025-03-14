@@ -7,24 +7,35 @@ from src.models.db import BaseModel
 
 
 class User(BaseModel):
+    external_id: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str]
     name: Mapped[str]
     surname: Mapped[str]
     patronymic: Mapped[str]
-    phone: Mapped[str]
+    phone: Mapped[str | None]
 
     snils: Mapped[str | None]
     group: Mapped[str | None]
     course: Mapped[int | None]
 
     # TODO: implement real passport fields
-    passport_data: Mapped[str]
+    passport_data: Mapped[str | None]
 
     roles: Mapped[list["Role"]] = relationship(secondary="user_has_role")
 
 
+class Token(BaseModel):
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user_agent: Mapped[str]
+    token: Mapped[str]
+    exp: Mapped[int]
+
+
 class Role(BaseModel):
+    external_id: Mapped[str]
     title: Mapped[str]
+
+    users: Mapped[list[User]] = relationship(secondary="user_has_role")
     permissions: Mapped[list["Permission"]] = relationship(
         secondary="role_has_permission"
     )

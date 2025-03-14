@@ -17,7 +17,8 @@ class AdminApiUser:
 
     @staticmethod
     def from_response(response: Response) -> "AdminApiUser":
-        user_data = json.loads(response.json())
+        user_data = response.json()
+        print(user_data)
         return AdminApiUser(
             id=user_data["id"],
             external_id=user_data["external_id"],
