@@ -1,6 +1,7 @@
 from fastapi import Depends
 
-from src.schemas.auth import AuthTokens, JWTPayload
+from src.exceptions.auth import InvalidTokenException
+from src.schemas.auth import AuthTokens, JWTPayload, RenewAccessTokenSchema
 from src.schemas.user import AdminApiTokenSchema, UserSchema
 from src.gateways.admin_api import AdminApi
 
@@ -9,6 +10,7 @@ from src.repository.permission import PermissionRepository
 from src.repository.roles import RoleRepository
 from src.repository.token import TokenRepository
 from src.services.jwt import JWTService
+from src.enums.auth import PermissionsEnum
 from src.settings import settings
 from src.logger import logger
 
@@ -61,6 +63,26 @@ class AuthService:
             )
             return user
 
+    async def veryfi_permissions(
+        self,
+        user: UserSchema,
+        has_have: list[PermissionsEnum],
+    ) -> bool:
+        logger.info("veryfing permissions...")
+        permissions = await self.permission_repo.get_user_permissions(user.id)
+
+        has_have_set = set([el.value for el in has_have])
+        permissions_set = set([el.title for el in permissions])
+        res = has_have_set.issubset(permissions_set)
+
+        logger.info("veryfing " + ("successd" if res else "failed"))
+        if not res:
+            logger.debug(
+                f"user has have permissions: {has_have_set} \nbut have: {permissions_set}"
+            )
+
+        return res
+
     async def create_user_tokens(self, user: UserSchema, user_agent: str) -> AuthTokens:
         permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
 
@@ -75,3 +97,30 @@ class AuthService:
             access_token=access_token,
             refresh_token=refresh_token,
         )
+
+    async def renew_tokens(
+        self,
+        tokens: RenewAccessTokenSchema,
+        user_agent: str,
+    ) -> AuthTokens:
+        payload = self.jwt.decode(
+            tokens.access_token, options={"verify_signature": True}
+        )
+
+        user = await self.user_repo.get(payload.user_id)
+
+        if not user:
+            raise InvalidTokenException("User not found.")
+        permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
+
+        payload = JWTPayload(user_id=user.id, permissions=permissions)
+        access = self.jwt.encode(payload)
+
+        refresh = await self.token_repo.renew_token(
+            tokens.refresh_token,
+            user.id,
+            user_agent,
+            self.refresh_lifetime,
+        )
+
+        return AuthTokens(access_token=access, refresh_token=refresh)

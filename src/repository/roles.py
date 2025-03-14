@@ -36,9 +36,9 @@ class RoleRepository:
     async def get_by_user_id(self, user_id: int) -> list[RoleSchema]:
         stmt = (
             select(Role)
-            .join(Role.user)
+            .join(Role.users)
             .where(User.id == user_id)
-            .options(joinedload(Role.user))
+            .options(joinedload(Role.users))
         )
 
         roles = await self.session.scalars(stmt)
