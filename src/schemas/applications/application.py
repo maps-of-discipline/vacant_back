@@ -3,13 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 
-from src.schemas.user import UserForListViewSchema
-
-
 class CreateProgramSchema(BaseModel):
     type: str
-    application_id: int
-    priority: int | None
     okso: str
     profile: str
     form: str | None
@@ -22,10 +17,10 @@ class CreateProgramSchema(BaseModel):
 
 class ProgramSchema(CreateProgramSchema):
     id: int
+    application_id: int
 
 
 class CreateApplicationSchema(BaseModel):
-    user_id: int
     date: datetime
 
     hostel_policy_accepted: bool
@@ -41,7 +36,8 @@ class CreateApplicationSchema(BaseModel):
 class ApplicationForListViewSchema(BaseModel):
     id: int
     date: datetime
-    user: UserForListViewSchema
+    type: str
+    status: str
 
     hostel_policy_accepted: bool
     vacation_policy_viewed: bool

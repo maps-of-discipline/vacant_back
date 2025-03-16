@@ -8,6 +8,6 @@ class ApplicationService:
     def __init__(self, repo: ApplicationRepository = Depends()) -> None:
         self._repo = repo
 
-    async def get_all(self) -> list[ApplicationForListViewSchema]:
-        applications = await self._repo.all()
+    async def get_all(self, user_id: int) -> list[ApplicationForListViewSchema]:
+        applications = await self._repo.all(user_id=user_id)
         return applications

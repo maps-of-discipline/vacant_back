@@ -22,6 +22,7 @@ class User(BaseModel):
     passport_data: Mapped[str | None]
 
     roles: Mapped[list["Role"]] = relationship(secondary="user_has_role")
+    applications: Mapped["Application"] = relationship()
 
 
 class Token(BaseModel):
@@ -63,7 +64,6 @@ role_has_permission = Table(
 
 class Program(BaseModel):
     type: Mapped[str]
-    priority: Mapped[int | None]
     okso: Mapped[str]
     profile: Mapped[str]
     form: Mapped[str | None]
@@ -79,6 +79,7 @@ class Program(BaseModel):
 class Application(BaseModel):
     date: Mapped[datetime] = mapped_column(default=datetime.now)
     type: Mapped[str]
+    status: Mapped[str]
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     hostel_policy_accepted: Mapped[bool]
@@ -119,7 +120,6 @@ class ChangeApplication(Application):
     id: Mapped[int] = mapped_column(
         ForeignKey("application.id", ondelete="CASCADE"), primary_key=True
     )
-    change_date: Mapped[datetime]
     purpose: Mapped[str] = mapped_column(String(1023))
 
     __mapper_args__ = {"polymorphic_identity": "change"}

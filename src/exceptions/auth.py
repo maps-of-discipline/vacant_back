@@ -11,6 +11,11 @@ class TokenExpiredException(HTTPException):
         super().__init__(401, "Authorization token has expired")
 
 
+class AdminApiTokenExpiredException(HTTPException):
+    def __init__(self):
+        super().__init__(401, "AdminApi token has expired")
+
+
 class PermissionsDeniedException(HTTPException):
     def __init__(self):
         super().__init__(403, "User don't have access permissions")

@@ -3,6 +3,7 @@ import httpx
 from src.settings import settings
 from src.gateways.dto import AdminApiUser, AdminApiServiceRole, AdminApiUserServiceRole
 from src.logger import logger
+from src.exceptions.auth import AdminApiTokenExpiredException
 
 
 class JWTAuth(httpx.Auth):
@@ -50,7 +51,7 @@ class AdminApi:
             logger.warning(
                 f"admin_api client: response to /api/v1/users/me has status code {response.status_code}"
             )
-            raise Exception("/api/v1/users/me with status code", response.status_code)
+            raise AdminApiTokenExpiredException()
         return AdminApiUser.from_response(response)
 
     async def get_vacancy_roles(self) -> list[AdminApiServiceRole]:

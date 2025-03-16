@@ -104,7 +104,7 @@ class AuthService:
         user_agent: str,
     ) -> AuthTokens:
         payload = self.jwt.decode(
-            tokens.access_token, options={"verify_signature": True}
+            tokens.access_token, options={"verify_signature": True, "verify_exp": False}
         )
 
         user = await self.user_repo.get(payload.user_id)
