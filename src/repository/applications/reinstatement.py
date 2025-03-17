@@ -24,6 +24,7 @@ class ReinstatementApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
+            status=application.status,
             date=application.date,
             hostel_policy_accepted=application.hostel_policy_accepted,
             vacation_policy_viewed=application.vacation_policy_viewed,
@@ -44,7 +45,6 @@ class ReinstatementApplicationRepository:
                     id=program.id,
                     type=program.type,
                     application_id=program.application_id,
-                    priority=program.priority,
                     okso=program.okso,
                     profile=program.profile,
                     form=program.form,
@@ -62,7 +62,8 @@ class ReinstatementApplicationRepository:
     ) -> ReinstatementApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = ReinstatementApplication(
-            **application.model_dump(exclude={"programs", "type"})
+            **application.model_dump(exclude={"programs", "type"}),
+            status="new",
         )
 
         self.session.add(created_application)

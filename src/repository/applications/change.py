@@ -26,7 +26,6 @@ class ChangeApplicationRepository:
             vacation_policy_viewed=application.vacation_policy_viewed,
             no_restrictions_policy_accepted=application.vacation_policy_viewed,
             reliable_information_policy_accepted=application.reliable_information_policy_accepted,
-            change_date=application.change_date.replace(tzinfo=None),
             purpose=application.purpose,
             programs=[],
         )
@@ -38,7 +37,6 @@ class ChangeApplicationRepository:
                     id=program.id,
                     type=program.type,
                     application_id=program.application_id,
-                    priority=program.priority,
                     okso=program.okso,
                     profile=program.profile,
                     form=program.form,
@@ -55,9 +53,9 @@ class ChangeApplicationRepository:
         self, application: CreateChangeApplicationSchema
     ) -> ChangeApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
-        application.change_date = application.change_date.replace(tzinfo=None)
         created_application = ChangeApplication(
-            **application.model_dump(exclude={"programs", "type"})
+            **application.model_dump(exclude={"programs", "type"}), 
+            status="new",
         )
 
         self.session.add(created_application)
