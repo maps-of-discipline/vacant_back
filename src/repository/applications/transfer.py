@@ -24,6 +24,7 @@ class TransferApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
+            status=application.status,
             date=application.date,
             continue_year=application.continue_year,
             hostel_policy_accepted=application.hostel_policy_accepted,
@@ -41,7 +42,6 @@ class TransferApplicationRepository:
                     id=program.id,
                     type=program.type,
                     application_id=program.application_id,
-                    priority=program.priority,
                     okso=program.okso,
                     profile=program.profile,
                     form=program.form,
@@ -59,7 +59,8 @@ class TransferApplicationRepository:
     ) -> TransferApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = TransferApplication(
-            **application.model_dump(exclude={"programs", "type"})
+            **application.model_dump(exclude={"programs", "type"}),
+            status="new",
         )
 
         self.session.add(created_application)

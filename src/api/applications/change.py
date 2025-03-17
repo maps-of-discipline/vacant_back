@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Body, Path
 
 from src.schemas.applications.change import (
     CreateChangeApplicationSchema,
-    POSTCreateChangeApplicationSchema,
+    RequestCreateChangeApplicationSchema,
     ChangeApplicationSchema,
 )
 from src.schemas.user import UserSchema
@@ -17,7 +17,7 @@ async def create_change_application(
     user: UserSchema = Depends(
         PermissionRequire([PermissionsEnum.canCreateSelfApplication])
     ),
-    application: POSTCreateChangeApplicationSchema = Body(),
+    application: RequestCreateChangeApplicationSchema = Body(),
     service: ChangeApplicationService = Depends(),
 ) -> ChangeApplicationSchema:
     application_wiht_user_id = CreateChangeApplicationSchema(

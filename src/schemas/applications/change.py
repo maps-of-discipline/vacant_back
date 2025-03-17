@@ -5,11 +5,11 @@ from pydantic import ConfigDict
 from src.schemas.applications.application import CreateApplicationSchema
 
 
-class POSTCreateChangeApplicationSchema(CreateApplicationSchema):
+class RequestCreateChangeApplicationSchema(CreateApplicationSchema):
     purpose: str
 
 
-class CreateChangeApplicationSchema(POSTCreateChangeApplicationSchema):
+class CreateChangeApplicationSchema(RequestCreateChangeApplicationSchema):
     user_id: int
 
 

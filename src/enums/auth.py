@@ -6,3 +6,4 @@ class PermissionsEnum(str, Enum):
     perm2 = "perm2"
     canCreateSelfApplication = "canCreateSelfApplication"
     canViewOwnApplications = "canViewOwnApplications"
+    canCreateManySelfApplications = "canCreateManySelfApplications"
