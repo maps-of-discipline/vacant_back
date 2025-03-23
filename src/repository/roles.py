@@ -46,3 +46,8 @@ class RoleRepository:
             RoleSchema(id=el.id, title=el.title, external_id=el.external_id)
             for el in roles
         ]
+
+    async def get_by_titles(self, titles: list[str]) -> list[Role]:
+        stmt = select(Role).where(Role.title.in_(titles))
+        roles = await self.session.scalars(stmt)
+        return list(roles)

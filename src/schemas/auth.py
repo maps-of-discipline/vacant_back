@@ -21,3 +21,7 @@ class JWTPayload(BaseModel):
 
 class RenewAccessTokenSchema(AuthTokens):
     pass
+
+
+class SignInSchema(BaseModel):
+    email: str

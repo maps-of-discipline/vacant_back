@@ -13,6 +13,7 @@ from src.services.jwt import JWTService
 from src.enums.auth import PermissionsEnum
 from src.settings import settings
 from src.logger import logger
+from src.exceptions.general import EntityNotFoundException
 
 
 class AuthService:

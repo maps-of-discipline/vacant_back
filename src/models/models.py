@@ -18,15 +18,20 @@ class User(BaseModel):
     group: Mapped[str | None]
     course: Mapped[int | None]
 
-    # TODO: implement real passport fields
-    passport_data: Mapped[str | None]
+    sex: Mapped[str]
+    birtdate: Mapped[datetime]
+    passport_series: Mapped[str]
+    passport_birthplace: Mapped[str]
+    passport_issued_by: Mapped[str]
+    passport_issued_code: Mapped[str]
+    passport_issued_date: Mapped[datetime]
 
     roles: Mapped[list["Role"]] = relationship(secondary="user_has_role")
     applications: Mapped["Application"] = relationship()
 
 
 class Token(BaseModel):
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
     user_agent: Mapped[str]
     token: Mapped[str]
     exp: Mapped[int]
@@ -49,16 +54,16 @@ class Permission(BaseModel):
 user_has_role = Table(
     "user_has_role",
     BaseModel.metadata,
-    Column("user_id", ForeignKey("user.id")),
-    Column("role_id", ForeignKey("role.id")),
+    Column("user_id", ForeignKey("user.id", ondelete="CASCADE")),
+    Column("role_id", ForeignKey("role.id", ondelete="CASCADE")),
 )
 
 
 role_has_permission = Table(
     "role_has_permission",
     BaseModel.metadata,
-    Column("role_id", ForeignKey("role.id")),
-    Column("permission_id", ForeignKey("permission.id")),
+    Column("role_id", ForeignKey("role.id", ondelete="CASCADE")),
+    Column("permission_id", ForeignKey("permission.id", ondelete="CASCADE")),
 )
 
 
@@ -80,7 +85,7 @@ class Application(BaseModel):
     date: Mapped[datetime] = mapped_column(default=datetime.now)
     type: Mapped[str]
     status: Mapped[str]
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
 
     hostel_policy_accepted: Mapped[bool]
     vacation_policy_viewed: Mapped[bool]
@@ -141,6 +146,8 @@ class TransferApplication(Application):
 
 
 class Documents(BaseModel):
-    application_id: Mapped[int] = mapped_column(ForeignKey("application.id"))
+    application_id: Mapped[int] = mapped_column(
+        ForeignKey("application.id", ondelete="CASCADE")
+    )
     type: Mapped[str]
     filepath: Mapped[str]

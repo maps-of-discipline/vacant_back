@@ -1,8 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from datetime import datetime
 
 
 class AdminApiTokenSchema(BaseModel):
     token: str
+
+
+# const user = reactive({
+#   email: "",
+#   name: "",
+#   surname: "",
+#   patronymic: "",
+#   phone: "",
+#   snils: "",
+#   course: null,
+#   sex: null,
+#   passport_data: {
+#     seties: null,
+#     sex: null,
+#     birthdate: null,
+#     birthplace: null,
+#     issued_by: null,
+#     issued_code: null,
+#     issued_date: null,
+#   },
+# });
 
 
 class CreateUserSchema(BaseModel):
@@ -12,9 +34,17 @@ class CreateUserSchema(BaseModel):
     patronymic: str
     phone: str | None
     snils: str | None
-    group: str | None
+    group: str | None = Field(default=None)
     course: int | None
-    passport_data: str | None
+
+    sex: str = Field(default="None")
+    birtdate: datetime = Field(default_factory=datetime.now)
+    passport_series: str = Field(default="None")
+
+    passport_birthplace: str = Field(default="None")
+    passport_issued_by: str = Field(default="None")
+    passport_issued_code: str = Field(default="None")
+    passport_issued_date: datetime = Field(default_factory=datetime.now)
 
 
 class UserForListViewSchema(BaseModel):
@@ -31,4 +61,3 @@ class UserForListViewSchema(BaseModel):
 class UserSchema(CreateUserSchema):
     id: int
     external_id: str
-

@@ -55,7 +55,7 @@ class ChangeApplicationRepository:
         application.date = application.date.replace(tzinfo=None)
         created_application = ChangeApplication(
             **application.model_dump(exclude={"programs", "type"}), 
-            status="new",
+            status="new"
         )
 
         self.session.add(created_application)
