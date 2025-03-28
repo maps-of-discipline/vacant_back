@@ -37,10 +37,6 @@ class AuthSettings(BaseModel):
     algorithm: str = "HS256"
 
 
-class KdMaps(BaseModel):
-    base_url: str
-
-
 class LoggingSettings(BaseModel):
     level: str = "DEBUG"
     log_file: str = "logs/app.log"
@@ -54,7 +50,6 @@ class Settings(BaseSettings):
     run: RunSettigns
     api: ApiSettings
     admin_api: AdminApiSettings
-    kd_maps: KdMaps
     auth: AuthSettings
     logging: LoggingSettings
 
