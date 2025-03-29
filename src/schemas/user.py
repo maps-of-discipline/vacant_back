@@ -27,7 +27,8 @@ class AdminApiTokenSchema(BaseModel):
 # });
 
 
-class CreateUserSchema(BaseModel):
+class UserSchema(BaseModel):
+    id: str
     email: str
     name: str
     surname: str
@@ -57,7 +58,3 @@ class UserForListViewSchema(BaseModel):
     group: str | None
     course: int | None
 
-
-class UserSchema(CreateUserSchema):
-    id: int
-    external_id: str

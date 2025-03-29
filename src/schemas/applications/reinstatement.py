@@ -12,7 +12,7 @@ class RequestCreateReinstatementApplicationSchema(CreateApplicationSchema):
 
 
 class CreateReinstatementApplicationSchema(RequestCreateReinstatementApplicationSchema):
-    user_id: int
+    user_id: str
 
 
 class ReinstatementApplicationSchema(CreateReinstatementApplicationSchema):

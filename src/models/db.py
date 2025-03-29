@@ -35,8 +35,6 @@ async def sessionmaker():
 class BaseModel(DeclarativeBase):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     @declared_attr.directive
     def __tablename__(cls) -> str:
         return cls.__camel_to_snake(cls.__name__)
@@ -45,4 +43,3 @@ class BaseModel(DeclarativeBase):
     def __camel_to_snake(cls, camel: str) -> str:
         snake_str = re.sub("([a-z0-9])([A-Z])", r"\1_\2", camel).lower()
         return snake_str
-

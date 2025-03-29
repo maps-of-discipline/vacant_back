@@ -13,7 +13,7 @@ class ApplicationRepository:
     def __init__(self, session: AsyncSession = Depends(sessionmaker)):
         self.session: AsyncSession = session
 
-    async def all(self, user_id: int) -> list[ApplicationForListViewSchema]:
+    async def all(self, user_id: str) -> list[ApplicationForListViewSchema]:
         stmt = (
             select(Application)
             .join(User.applications)

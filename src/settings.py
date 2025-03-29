@@ -37,8 +37,13 @@ class AuthSettings(BaseModel):
     algorithm: str = "HS256"
 
 
-class KdMaps(BaseModel):
-    base_url: str
+class GRPCSettings(BaseModel):
+    host: str
+    port: int
+
+    @property
+    def url(self) -> str:
+        return f"{self.host}:{self.port}"
 
 
 class LoggingSettings(BaseModel):
@@ -54,9 +59,9 @@ class Settings(BaseSettings):
     run: RunSettigns
     api: ApiSettings
     admin_api: AdminApiSettings
-    kd_maps: KdMaps
     auth: AuthSettings
     logging: LoggingSettings
+    grpc: GRPCSettings
 
 
 settings: Settings = Settings(_env_file=".env")
