@@ -31,8 +31,6 @@ class AdminApiSettings(BaseModel):
 
 
 class AuthSettings(BaseModel):
-    access_token_lifetime: int
-    refresh_token_lifetime: int
     secret: str
     algorithm: str = "HS256"
 
