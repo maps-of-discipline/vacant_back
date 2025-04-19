@@ -31,13 +31,13 @@ def get_logger(name: str):
     console_handler.setLevel(log_level)
     console_handler.setFormatter(LogFormatter())
 
-    file_handler = logging.FileHandler(settings.logging.log_file)
-    file_handler.setLevel(log_level)
-    file_handler.setFormatter(logging.Formatter(log_format))
-
-    logger.addHandler(console_handler)
-
-    if settings.logging.use_file_handler:
-        logger.addHandler(file_handler)
+    # file_handler = logging.FileHandler(settings.logging.log_file)
+    # file_handler.setLevel(log_level)
+    # file_handler.setFormatter(logging.Formatter(log_format))
+    #
+    # logger.addHandler(console_handler)
+    #
+    # if settings.logging.use_file_handler:
+    #     logger.addHandler(file_handler)
 
     return logger

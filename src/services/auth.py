@@ -36,7 +36,7 @@ class PermissionRequire:
         self._auth_service = auth_grpc_service
         self._permissions_service = permissions_service
 
-        try: 
+        try:
             payload: TokenPayload = await auth_grpc_service.get_payload(
                 jwt_token=token.credentials
             )
@@ -44,21 +44,20 @@ class PermissionRequire:
         except grpc.aio.AioRpcError as e:
             s = grpc.StatusCode
             if e.code() in [s.UNAUTHENTICATED, s.PERMISSION_DENIED]:
+                logger.error(f"gRPC response have status: {e.code()}: {e.details()}")
                 raise InvalidTokenException(e.details())
             else:
                 logger.error(f"GRPC error with status: {e.code()}: {e.details()}")
                 raise BadRequest(e.details)
-                
+
         user = await self._user_repo.get(payload.user_id)
 
         if not user:
-            logger.info('User not found, creating new one.')
+            logger.info("User not found, creating new one.")
             user = await self._create_user(token.credentials)
-        
 
-        
         if any(perm.value not in payload.permissions for perm in self.required):
-            logger.info('User does not have required permissions.')
+            logger.info("User does not have required permissions.")
             raise PermissionsDeniedException()
 
         if not await self._permissions_service.check(user, payload.permissions):  # type: ignore
