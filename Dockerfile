@@ -1,5 +1,5 @@
 # Этап сборки: создаем wheels
-FROM python:3.13-slim as builder
+FROM python:3.13-slim AS builder
 
 ENV PYTHONFAULTHANDLER=1 \
   PYTHONUNBUFFERED=1 \
