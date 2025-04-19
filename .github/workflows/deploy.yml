@@ -21,7 +21,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: localhost:5050/vacancy-back:latest
+          tags: localhost:5050/vacancy-back:main
           cache-from: type=registry,ref=localhost:5050/vacancy-back:cache
           cache-to: type=registry,ref=localhost:5050/vacancy-back:cache,mode=max
 
