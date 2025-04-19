@@ -7,7 +7,7 @@ from src.models.db import BaseModel
 
 
 class User(BaseModel):
-    external_id: Mapped[str] = mapped_column(unique=True)
+    id: Mapped[str] = mapped_column(primary_key=True)
     email: Mapped[str]
     name: Mapped[str]
     surname: Mapped[str]
@@ -26,48 +26,11 @@ class User(BaseModel):
     passport_issued_code: Mapped[str]
     passport_issued_date: Mapped[datetime]
 
-    roles: Mapped[list["Role"]] = relationship(secondary="user_has_role")
     applications: Mapped["Application"] = relationship()
 
 
-class Token(BaseModel):
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
-    user_agent: Mapped[str]
-    token: Mapped[str]
-    exp: Mapped[int]
-
-
-class Role(BaseModel):
-    external_id: Mapped[str]
-    title: Mapped[str]
-
-    users: Mapped[list[User]] = relationship(secondary="user_has_role")
-    permissions: Mapped[list["Permission"]] = relationship(
-        secondary="role_has_permission"
-    )
-
-
-class Permission(BaseModel):
-    title: Mapped[str]
-
-
-user_has_role = Table(
-    "user_has_role",
-    BaseModel.metadata,
-    Column("user_id", ForeignKey("user.id", ondelete="CASCADE")),
-    Column("role_id", ForeignKey("role.id", ondelete="CASCADE")),
-)
-
-
-role_has_permission = Table(
-    "role_has_permission",
-    BaseModel.metadata,
-    Column("role_id", ForeignKey("role.id", ondelete="CASCADE")),
-    Column("permission_id", ForeignKey("permission.id", ondelete="CASCADE")),
-)
-
-
 class Program(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str]
     okso: Mapped[str]
     profile: Mapped[str]
@@ -82,10 +45,11 @@ class Program(BaseModel):
 
 
 class Application(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
     date: Mapped[datetime] = mapped_column(default=datetime.now)
     type: Mapped[str]
     status: Mapped[str]
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
+    user_id: Mapped[str] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
 
     hostel_policy_accepted: Mapped[bool]
     vacation_policy_viewed: Mapped[bool]
@@ -146,6 +110,7 @@ class TransferApplication(Application):
 
 
 class Documents(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
     application_id: Mapped[int] = mapped_column(
         ForeignKey("application.id", ondelete="CASCADE")
     )

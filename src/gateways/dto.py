@@ -4,6 +4,23 @@ from dataclasses import dataclass
 
 
 @dataclass
+class CreateAdminApiUser:
+    name: str
+    surname: str
+    patronymic: str
+    email: str
+    role: str
+    login: str
+    faculty: str | None
+    service_name: str
+
+
+@dataclass
+class CreateAdminApiUserResponse:
+    id: str
+
+
+@dataclass
 class AdminApiUser:
     id: str
     external_id: int
@@ -18,7 +35,6 @@ class AdminApiUser:
     @staticmethod
     def from_response(response: Response) -> "AdminApiUser":
         user_data = response.json()
-        print(user_data)
         return AdminApiUser(
             id=user_data["id"],
             external_id=user_data["external_id"],

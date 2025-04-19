@@ -10,7 +10,7 @@ class RequestCreateChangeApplicationSchema(CreateApplicationSchema):
 
 
 class CreateChangeApplicationSchema(RequestCreateChangeApplicationSchema):
-    user_id: int
+    user_id: str
 
 
 class ChangeApplicationSchema(CreateChangeApplicationSchema):

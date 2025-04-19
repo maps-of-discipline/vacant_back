@@ -1,127 +1,82 @@
+from typing import Annotated
+
 from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import grpc
 
-from src.exceptions.auth import InvalidTokenException
-from src.schemas.auth import AuthTokens, JWTPayload, RenewAccessTokenSchema
-from src.schemas.user import AdminApiTokenSchema, UserSchema
-from src.gateways.admin_api import AdminApi
-
+from src.schemas.user import UserSchema
 from src.repository.user import UserRepository
-from src.repository.permission import PermissionRepository
-from src.repository.roles import RoleRepository
-from src.repository.token import TokenRepository
-from src.services.jwt import JWTService
+from src.exceptions import InvalidTokenException, PermissionsDeniedException, BadRequest
 from src.enums.auth import PermissionsEnum
-from src.settings import settings
-from src.logger import logger
-from src.exceptions.general import EntityNotFoundException
+from src.grpc import AuthGRPCService
+from src.grpc.dto import TokenPayload
+from src.services.permissions import PermissionService
+from src.logger import get_logger
 
 
-class AuthService:
-    def __init__(
+logger = get_logger(__name__)
+
+
+class PermissionRequire:
+    def __init__(self, permissions: list[PermissionsEnum]):
+        self.required: list[PermissionsEnum] = permissions
+        self._user_repo: UserRepository
+        self._auth_service: AuthGRPCService
+        self._permissions_service: PermissionService
+
+    async def __call__(
         self,
-        user_repository: UserRepository = Depends(),
-        roles_repository: RoleRepository = Depends(),
-        permission_repository: PermissionRepository = Depends(),
-        token_repository: TokenRepository = Depends(),
-        jwt_service: JWTService = Depends(),
-    ):
-        self.user_repo = user_repository
-        self.role_repo = roles_repository
-        self.permission_repo = permission_repository
-        self.token_repo = token_repository
-        self.jwt = jwt_service
-        self.refresh_lifetime = settings.auth.refresh_token_lifetime
-
-    async def log_in_with_admin_api_token(
-        self, token: AdminApiTokenSchema
+        token: Annotated[HTTPAuthorizationCredentials, Depends(HTTPBearer())],
+        user_repo: UserRepository = Depends(),
+        auth_grpc_service: AuthGRPCService = Depends(),
+        permissions_service: PermissionService = Depends(),
     ) -> UserSchema:
-        async with AdminApi(token.token) as client:
-            logger.debug("AuthService: logging whith admin-api token")
-            vacancy_roles = await client.get_vacancy_roles()
-            logger.info(f"AuthService: got vacancy roles: {vacancy_roles}")
-            existing_roles = [el.title for el in await self.role_repo.all()]
+        logger.info("Checking user permissions before request")
+        self._user_repo = user_repo
+        self._auth_service = auth_grpc_service
+        self._permissions_service = permissions_service
 
-            for role in vacancy_roles:
-                if role.role not in existing_roles:
-                    await self.role_repo.create_from_admin_api(role)
-
-            logger.info("AuthService: added unexisted roles")
-            admin_api_user = await client.fetch_user()
-            logger.info(f"AuthService: user {admin_api_user.id} has fetched")
-
-            user: UserSchema | None = await self.user_repo.get_by_external_id(
-                admin_api_user.id
+        try:
+            payload: TokenPayload = await auth_grpc_service.get_payload(
+                jwt_token=token.credentials
             )
 
-            if not user:
-                logger.info(
-                    f"AuthService: user {admin_api_user} hasn't finded in db. Adding new one."
-                )
-                user = await self.user_repo.create_from_admin_api(admin_api_user)
-            admin_api_user_roles = await client.get_user_roles(admin_api_user.id)
-            await self.user_repo.assign_admin_api_roles_if_no_exists(
-                user.id, admin_api_user_roles
-            )
-            return user
+        except grpc.aio.AioRpcError as e:
+            s = grpc.StatusCode
+            if e.code() in [s.UNAUTHENTICATED, s.PERMISSION_DENIED]:
+                logger.error(f"gRPC response have status: {e.code()}: {e.details()}")
+                raise InvalidTokenException(e.details())
+            else:
+                logger.error(f"GRPC error with status: {e.code()}: {e.details()}")
+                raise BadRequest(e.details)
 
-    async def veryfi_permissions(
-        self,
-        user: UserSchema,
-        has_have: list[PermissionsEnum],
-    ) -> bool:
-        logger.info("veryfing permissions...")
-        permissions = await self.permission_repo.get_user_permissions(user.id)
-
-        has_have_set = set([el.value for el in has_have])
-        permissions_set = set([el.title for el in permissions])
-        res = has_have_set.issubset(permissions_set)
-
-        logger.info("veryfing " + ("successd" if res else "failed"))
-        if not res:
-            logger.debug(
-                f"user has have permissions: {has_have_set} \nbut have: {permissions_set}"
-            )
-
-        return res
-
-    async def create_user_tokens(self, user: UserSchema, user_agent: str) -> AuthTokens:
-        permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
-
-        payload = JWTPayload(user_id=user.id, permissions=permissions)
-        access_token = self.jwt.encode(payload)
-
-        refresh_token = await self.token_repo.create_refresh_token(
-            user.id, user_agent=user_agent, lifetime=self.refresh_lifetime
-        )
-
-        return AuthTokens(
-            access_token=access_token,
-            refresh_token=refresh_token,
-        )
-
-    async def renew_tokens(
-        self,
-        tokens: RenewAccessTokenSchema,
-        user_agent: str,
-    ) -> AuthTokens:
-        payload = self.jwt.decode(
-            tokens.access_token, options={"verify_signature": True, "verify_exp": False}
-        )
-
-        user = await self.user_repo.get(payload.user_id)
+        user = await self._user_repo.get(payload.user_id)
 
         if not user:
-            raise InvalidTokenException("User not found.")
-        permissions = await self.permission_repo.get_user_permissions(user_id=user.id)
+            logger.info("User not found, creating new one.")
+            user = await self._create_user(token.credentials)
 
-        payload = JWTPayload(user_id=user.id, permissions=permissions)
-        access = self.jwt.encode(payload)
+        if any(perm.value not in payload.permissions for perm in self.required):
+            logger.info("User does not have required permissions.")
+            raise PermissionsDeniedException()
 
-        refresh = await self.token_repo.renew_token(
-            tokens.refresh_token,
-            user.id,
-            user_agent,
-            self.refresh_lifetime,
+        if not await self._permissions_service.check(user, payload.permissions):  # type: ignore
+            logger.info("User doesn't pass permissions check")
+            raise PermissionsDeniedException()
+        return user  # type: ignore
+
+    async def _create_user(self, token: str) -> UserSchema:
+        admin_api_user = await self._auth_service.get_user_data(jwt_token=token)
+        user = await self._user_repo.create_user(
+            UserSchema(
+                id=admin_api_user.id,
+                email=admin_api_user.email,
+                name=admin_api_user.name,
+                surname=admin_api_user.surname,
+                patronymic=admin_api_user.patronymic,
+                phone=None,
+                course=None,
+                snils=None,
+            )
         )
-
-        return AuthTokens(access_token=access, refresh_token=refresh)
+        return user

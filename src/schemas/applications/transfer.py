@@ -7,7 +7,7 @@ class RequestCreateTransferApplicationSchema(CreateApplicationSchema):
 
 
 class CreateTransferApplicationSchema(RequestCreateTransferApplicationSchema):
-    user_id: int
+    user_id: str
 
 
 class TransferApplicationSchema(CreateTransferApplicationSchema):

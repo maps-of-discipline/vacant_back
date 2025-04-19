@@ -7,7 +7,7 @@ from src.schemas.applications.change import (
 )
 from src.schemas.user import UserSchema
 from src.services.applications.change import ChangeApplicationService
-from src.utils.auth import PermissionRequire, PermissionsEnum
+from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 
 router = APIRouter(prefix="/change", tags=["change"])
 
@@ -15,7 +15,11 @@ router = APIRouter(prefix="/change", tags=["change"])
 @router.post("")
 async def create_change_application(
     user: UserSchema = Depends(
-        PermissionRequire([PermissionsEnum.canCreateSelfApplication])
+        Require(
+            [
+                p.canCreateSelfApplication,
+            ]
+        )
     ),
     application: RequestCreateChangeApplicationSchema = Body(),
     service: ChangeApplicationService = Depends(),

@@ -2,30 +2,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 
 
-class AdminApiTokenSchema(BaseModel):
-    token: str
-
-
-# const user = reactive({
-#   email: "",
-#   name: "",
-#   surname: "",
-#   patronymic: "",
-#   phone: "",
-#   snils: "",
-#   course: null,
-#   sex: null,
-#   passport_data: {
-#     seties: null,
-#     sex: null,
-#     birthdate: null,
-#     birthplace: null,
-#     issued_by: null,
-#     issued_code: null,
-#     issued_date: null,
-#   },
-# });
-
 
 class CreateUserSchema(BaseModel):
     email: str
@@ -47,6 +23,10 @@ class CreateUserSchema(BaseModel):
     passport_issued_date: datetime = Field(default_factory=datetime.now)
 
 
+class UserSchema(CreateUserSchema):
+    id: str
+
+
 class UserForListViewSchema(BaseModel):
     id: int
     email: str
@@ -56,8 +36,3 @@ class UserForListViewSchema(BaseModel):
     phone: str | None
     group: str | None
     course: int | None
-
-
-class UserSchema(CreateUserSchema):
-    id: int
-    external_id: str

@@ -19,25 +19,25 @@ class LogFormatter(logging.Formatter):
         return log_msg
 
 
-logger = logging.getLogger(__name__)
+def get_logger(name: str):
+    logger = logging.getLogger(name)
 
-log_level = getattr(logging, settings.logging.level, logging.INFO)
-logger.setLevel(log_level)
+    log_level = getattr(logging, settings.logging.level, logging.INFO)
+    logger.setLevel(log_level)
 
+    log_format = "[%(levelname)] %(asctime): %(name) - %(message)"
 
-log_format = "[%(levelname)] %(asctime): %(name) - %(message)"
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(LogFormatter())
 
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(log_level)
-console_handler.setFormatter(LogFormatter())
+    # file_handler = logging.FileHandler(settings.logging.log_file)
+    # file_handler.setLevel(log_level)
+    # file_handler.setFormatter(logging.Formatter(log_format))
+    #
+    # logger.addHandler(console_handler)
+    #
+    # if settings.logging.use_file_handler:
+    #     logger.addHandler(file_handler)
 
-
-file_handler = logging.FileHandler(settings.logging.log_file)
-file_handler.setLevel(log_level)
-file_handler.setFormatter(logging.Formatter(log_format))
-
-
-logger.addHandler(console_handler)
-
-if settings.logging.use_file_handler:
-    logger.addHandler(file_handler)
+    return logger

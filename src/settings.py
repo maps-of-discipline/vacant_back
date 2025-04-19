@@ -37,6 +37,15 @@ class AuthSettings(BaseModel):
     algorithm: str = "HS256"
 
 
+class GRPCSettings(BaseModel):
+    host: str
+    port: int
+
+    @property
+    def url(self) -> str:
+        return f"{self.host}:{self.port}"
+
+
 class LoggingSettings(BaseModel):
     level: str = "DEBUG"
     log_file: str = "logs/app.log"
@@ -52,6 +61,7 @@ class Settings(BaseSettings):
     admin_api: AdminApiSettings
     auth: AuthSettings
     logging: LoggingSettings
+    grpc: GRPCSettings
 
 
 settings: Settings = Settings(_env_file=".env")

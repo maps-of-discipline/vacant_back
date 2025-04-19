@@ -7,7 +7,7 @@ from src.schemas.applications.transfer import (
 )
 from src.schemas.user import UserSchema
 from src.services.applications.transfer import TransferApplicationService
-from src.utils.auth import PermissionRequire, PermissionsEnum
+from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 
 router = APIRouter(prefix="/transfer", tags=["transfer"])
 
@@ -15,9 +15,9 @@ router = APIRouter(prefix="/transfer", tags=["transfer"])
 @router.post("")
 async def create_transfer_application(
     user: UserSchema = Depends(
-        PermissionRequire(
+        Require(
             [
-                PermissionsEnum.canCreateSelfApplication,
+                p.canCreateSelfApplication,
             ]
         )
     ),

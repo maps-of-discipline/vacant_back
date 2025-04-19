@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from src.schemas.user import UserSchema
-from src.utils.auth import PermissionRequire, PermissionsEnum
+from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 from src.schemas.applications.application import ApplicationForListViewSchema
 from src.services.applications.application import ApplicationService
 
@@ -13,9 +13,9 @@ router = APIRouter(prefix="/applications")
 )
 async def get_all_applications(
     user: UserSchema = Depends(
-        PermissionRequire(
+        Require(
             [
-                PermissionsEnum.canViewOwnApplications,
+                p.canViewOwnApplications,
             ]
         )
     ),

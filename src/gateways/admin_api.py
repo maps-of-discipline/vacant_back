@@ -1,103 +1,35 @@
 import json
 import httpx
+from dataclasses import asdict
+
+from src.exceptions.general import BadRequest
+from src.exceptions.http import EntityAlreadyExistsHTTPException
+from src.gateways.dto import CreateAdminApiUser, CreateAdminApiUserResponse
 from src.settings import settings
-from src.gateways.dto import AdminApiUser, AdminApiServiceRole, AdminApiUserServiceRole
-from src.logger import logger
-from src.exceptions.auth import AdminApiTokenExpiredException
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 
-class JWTAuth(httpx.Auth):
-    def __init__(self, token):
-        self.token = token
+class AdminAPIGateway:
+    def __init__(self, timeout: float = 10.0):
+        self.base_url = settings.admin_api.base_url
+        self.timeout = timeout
+        self.client = httpx.AsyncClient(base_url=self.base_url, timeout=self.timeout)
 
-    def auth_flow(self, request):
-        request.headers["Authorization"] = f"Bearer {self.token}"
-        yield request
+    async def create_user(self, user: CreateAdminApiUser) -> CreateAdminApiUserResponse:
+        logger.debug(asdict(user))
+        response = await self.client.post("/api/v1/users/sign-up", json=asdict(user))
 
-
-class AdminApi:
-    # TODO: test this shit
-    def __init__(
-        self,
-        token: str,
-        base_url: str = settings.admin_api.base_url,
-        service_title: str = settings.admin_api.service_title,
-    ):
-        logger.info("AdminApi client initialised")
-        self.base_url: str = base_url
-        self.auth: JWTAuth = JWTAuth(token=token)
-        self.client: httpx.AsyncClient
-        self.service_title = service_title
-
-    async def __aenter__(
-        self,
-    ) -> "AdminApi":
-        self.client = httpx.AsyncClient(base_url=self.base_url, auth=self.auth)
-        return self
-
-    async def __aexit__(
-        self,
-        ext_type,
-        ext_value,
-        traceback,
-    ) -> bool | None:
-        await self.client.aclose()
-        return False if ext_value else None
-
-    async def fetch_user(self) -> AdminApiUser:
-        logger.debug("admin_api client: requesting /api/v1/users/me")
-        response = await self.client.get("/api/v1/users/me")
-        if response.status_code != 200:
-            logger.warning(
-                f"admin_api client: response to /api/v1/users/me has status code {response.status_code}"
-            )
-            raise AdminApiTokenExpiredException()
-        return AdminApiUser.from_response(response)
-
-    async def get_vacancy_roles(self) -> list[AdminApiServiceRole]:
-        # TODO: impolement pagination
-
-        response = await self.client.post(
-            "/api/v1/service-roles/filters",
-            json={"service_name": self.service_title},
-            params={"page": 1, "size": 20},
-        )
         data = response.json()
-        roles = []
-        for el in data["data"]:
-            roles.append(
-                AdminApiServiceRole(
-                    id=el["id"],
-                    service_id=el["service_id"],
-                    role=el["role"],
-                )
+        if data.get("detail", "") == "user already exists":
+            logger.error(f"User with email: {user.email} already exists!")
+            raise EntityAlreadyExistsHTTPException(
+                f"User with email: {user.email} already exists!"
             )
+        if response.status_code >= 300:
+            logger.error(f"{response.status_code} {response.json()}")
+            raise BadRequest("Error occured during handling admin_adi http response.")
 
-        return roles
-
-    async def get_user_roles(self, user_id: str) -> list[AdminApiUserServiceRole]:
-        logger.info(f"getting user({user_id}) roles")
-
-        response = await self.client.post(
-            f"/api/v1/users/{user_id}/get_roles_from_service",
-            params={"service_name": self.service_title},
-        )
-        if response.status_code != 200:
-            logger.warning(
-                f"admin_api response from /api/v1/users/{user_id}/get_roles_from_service has {response.status_code} status code"
-            )
         data = response.json()
-        logger.debug(
-            f"response from /api/v1/users/{user_id}/get_roles_from_service ended wiht data: {data}"
-        )
-        roles = []
-        for role in data["roles"]:
-            roles.append(
-                AdminApiUserServiceRole(
-                    id=role["id"],
-                    service_role_id=role["service_roles_id"],
-                    user_id=role["user_id"],
-                )
-            )
-        logger.info("user roles has get succesfully")
-        return roles
+        return CreateAdminApiUserResponse(id=data["id"])

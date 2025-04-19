@@ -7,7 +7,7 @@ from src.schemas.applications.reinstatement import (
 )
 
 from src.schemas.user import UserSchema
-from src.utils.auth import PermissionRequire, PermissionsEnum
+from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 from src.services.applications.reinstatement import ReinstatementApplicationService
 
 router = APIRouter(prefix="/reinstatement", tags=["reinstatement"])
@@ -16,9 +16,9 @@ router = APIRouter(prefix="/reinstatement", tags=["reinstatement"])
 @router.post("")
 async def create_reinstatement_application(
     user: UserSchema = Depends(
-        PermissionRequire(
+        Require(
             [
-                PermissionsEnum.canCreateSelfApplication,
+                p.canCreateSelfApplication,
             ]
         )
     ),
