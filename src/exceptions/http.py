@@ -9,3 +9,8 @@ class NoUserAgentException(HTTPException):
 class EntityAlreadyExistsHTTPException(HTTPException):
     def __init__(self, detail: str) -> None:
         super().__init__(400, detail)
+
+
+class EntityNotFoundHTTPException(HTTPException):
+    def __init__(self, entity: str):
+        super().__init__(400, f"{entity} not found!")

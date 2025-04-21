@@ -23,3 +23,15 @@ async def get_all_applications(
 ) -> list[ApplicationForListViewSchema]:
     applications = await service.get_all(user_id=user.id)
     return applications
+
+
+@router.delete(
+    path="/{id}",
+    tags=["application"],
+)
+async def delete_application(
+    id: int,
+    application_service: ApplicationService = Depends(),
+) -> ApplicationForListViewSchema:
+    application = await application_service.delete(id)
+    return application

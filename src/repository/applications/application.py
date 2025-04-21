@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -39,3 +39,20 @@ class ApplicationRepository:
             )
 
         return applications
+
+    async def delete(self, id: int) -> ApplicationForListViewSchema | None:
+        stmt = delete(Application).where(Application.id == id).returning(Application)
+        application = await self.session.scalar(stmt)
+        if not application:
+            return None
+
+        return ApplicationForListViewSchema(
+            id=application.id,
+            date=application.date,
+            type=application.type,
+            status=application.status,
+            hostel_policy_accepted=application.hostel_policy_accepted,
+            vacation_policy_viewed=application.vacation_policy_viewed,
+            no_restrictions_policy_accepted=application.no_restrictions_policy_accepted,
+            reliable_information_policy_accepted=application.reliable_information_policy_accepted,
+        )

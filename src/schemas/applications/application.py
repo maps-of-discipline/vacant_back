@@ -43,3 +43,7 @@ class ApplicationForListViewSchema(BaseModel):
     vacation_policy_viewed: bool
     no_restrictions_policy_accepted: bool
     reliable_information_policy_accepted: bool
+
+
+class DeleteApplicationRequestSchema(BaseModel):
+    id: int
