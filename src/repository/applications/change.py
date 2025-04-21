@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.enums.applications import ApplicationStatusEnum as StatusEnum
 from src.schemas.applications.application import ProgramSchema
 from src.schemas.applications.change import (
     ChangeApplicationSchema,
@@ -21,6 +22,7 @@ class ChangeApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
+            status=StatusEnum(application.status.title),
             date=application.date,
             hostel_policy_accepted=application.hostel_policy_accepted,
             vacation_policy_viewed=application.vacation_policy_viewed,
@@ -50,12 +52,12 @@ class ChangeApplicationRepository:
         return schema
 
     async def create(
-        self, application: CreateChangeApplicationSchema
+        self, application: CreateChangeApplicationSchema, status_id: int
     ) -> ChangeApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = ChangeApplication(
-            **application.model_dump(exclude={"programs", "type"}), 
-            status="new"
+            **application.model_dump(exclude={"programs", "type"}),
+            status_id=status_id,
         )
 
         self.session.add(created_application)

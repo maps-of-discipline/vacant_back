@@ -11,6 +11,7 @@ from src.schemas.applications.reinstatement import (
 from src.schemas.applications.application import ProgramSchema
 from src.models.models import Program, ReinstatementApplication
 from src.models.db import sessionmaker
+from src.enums.applications import ApplicationStatusEnum as StatusEnum
 
 
 class ReinstatementApplicationRepository:
@@ -24,7 +25,7 @@ class ReinstatementApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
-            status=application.status,
+            status=StatusEnum(application.status.title),
             date=application.date,
             hostel_policy_accepted=application.hostel_policy_accepted,
             vacation_policy_viewed=application.vacation_policy_viewed,
@@ -58,12 +59,14 @@ class ReinstatementApplicationRepository:
         return schema
 
     async def create(
-        self, application: CreateReinstatementApplicationSchema
+        self,
+        application: CreateReinstatementApplicationSchema,
+        status_id: int,
     ) -> ReinstatementApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = ReinstatementApplication(
             **application.model_dump(exclude={"programs", "type"}),
-            status="new",
+            status_id=status_id,
         )
 
         self.session.add(created_application)

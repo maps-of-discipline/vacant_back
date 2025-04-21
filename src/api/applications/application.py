@@ -1,8 +1,13 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Body, Depends
+from src.schemas.comment import CommentSchema, GetApplicationCommentsRequestSchema
 from src.schemas.user import UserSchema
 from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 from src.schemas.applications.application import ApplicationForListViewSchema
 from src.services.applications.application import ApplicationService
+from src.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 router = APIRouter(prefix="/applications")
 
@@ -35,3 +40,17 @@ async def delete_application(
 ) -> ApplicationForListViewSchema:
     application = await application_service.delete(id)
     return application
+
+
+@router.get(
+    path="/comments",
+    tags=["application"],
+)
+async def get_application_comments(
+    data: GetApplicationCommentsRequestSchema = Body(),
+    service: ApplicationService = Depends(),
+) -> list[CommentSchema]:
+    logger.info("Start handling get application comments")
+    comments = await service.get_comments(data)
+    logger.info("Stop handling get application comments")
+    return comments

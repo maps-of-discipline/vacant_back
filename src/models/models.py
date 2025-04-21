@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import String, ForeignKey, Table, Column
+from sqlalchemy import String, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.db import BaseModel
@@ -48,7 +48,7 @@ class Application(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
     date: Mapped[datetime] = mapped_column(default=datetime.now)
     type: Mapped[str]
-    status: Mapped[str]
+    status_id: Mapped[int] = mapped_column(ForeignKey("status.id"))
     user_id: Mapped[str] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
 
     hostel_policy_accepted: Mapped[bool]
@@ -59,6 +59,10 @@ class Application(BaseModel):
     programs: Mapped[list[Program]] = relationship(lazy="selectin")
 
     user: Mapped[User] = relationship()
+
+    status: Mapped["Status"] = relationship(
+        "Status", primaryjoin="Status.id == Application.status_id"
+    )
 
     __mapper_args__ = {"polymorphic_identity": "application", "polymorphic_on": "type"}
 
@@ -116,3 +120,22 @@ class Documents(BaseModel):
     )
     type: Mapped[str]
     filepath: Mapped[str]
+
+
+class Status(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str]
+    verbose_name: Mapped[str]
+
+
+class CommonMessages(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    status_id: Mapped[int] = mapped_column(ForeignKey("status.id", ondelete="CASCADE"))
+    title: Mapped[str]
+
+
+class Comment(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(Text)
+    scope: Mapped[str]
+    application_id = mapped_column(ForeignKey("application.id"))

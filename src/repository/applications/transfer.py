@@ -11,6 +11,7 @@ from src.schemas.applications.transfer import (
 from src.schemas.applications.application import ProgramSchema
 from src.models.models import Program, TransferApplication
 from src.models.db import sessionmaker
+from src.enums.applications import ApplicationStatusEnum as StatusEnum
 
 
 class TransferApplicationRepository:
@@ -24,7 +25,7 @@ class TransferApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
-            status=application.status,
+            status=StatusEnum(application.status),
             date=application.date,
             continue_year=application.continue_year,
             hostel_policy_accepted=application.hostel_policy_accepted,
@@ -55,12 +56,12 @@ class TransferApplicationRepository:
         return schema
 
     async def create(
-        self, application: CreateTransferApplicationSchema
+        self, application: CreateTransferApplicationSchema, status_id: int
     ) -> TransferApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = TransferApplication(
             **application.model_dump(exclude={"programs", "type"}),
-            status="new",
+            status_id=status_id,
         )
 
         self.session.add(created_application)

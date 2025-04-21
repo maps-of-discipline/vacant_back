@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
+from src.enums.applications import ApplicationStatusEnum
 
 
 class CreateProgramSchema(BaseModel):
@@ -28,6 +29,7 @@ class CreateApplicationSchema(BaseModel):
     no_restrictions_policy_accepted: bool
     reliable_information_policy_accepted: bool
 
+    status: ApplicationStatusEnum
     programs: list[CreateProgramSchema]
 
     model_config = ConfigDict(from_attributes=True)
