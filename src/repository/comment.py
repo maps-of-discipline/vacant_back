@@ -1,29 +1,45 @@
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
+from sqlalchemy.orm import joinedload
 
 from src.enums.comment import CommentScopeEnum
 from src.models.db import sessionmaker
 from src.models.models import Comment
 from src.schemas.comment import CommentSchema
+from src.schemas.user import UserSchema
 
 
 class CommentRepository:
     def __init__(self, session: AsyncSession = Depends(sessionmaker)):
         self.session: AsyncSession = session
 
-    async def add(self, application_id: int, scope: str, text: str) -> CommentSchema:
-        comment = Comment(application_id=application_id, scope=scope, text=text)
+    async def add(
+        self, application_id: int, scope: str, text: str, user: UserSchema
+    ) -> CommentSchema:
+        comment = Comment(
+            application_id=application_id, user_id=user.id, scope=scope, text=text
+        )
         self.session.add(comment)
         await self.session.commit()
         await self.session.refresh(comment)
-        return CommentSchema(id=comment.id, text=comment.text)
+        return CommentSchema(
+            id=comment.id,
+            text=comment.text,
+            scope=CommentScopeEnum(comment.scope),
+            by=user.shotname,
+        )
 
     async def get_by_application_id(
         self, application_id: int, scope: CommentScopeEnum
-    ) -> list[CommentSchema]:
+    ) -> list[Comment]:
         stmt = select(Comment).where(
             Comment.application_id == application_id, Comment.scope == scope
         )
-        comments = await self.session.scalars(stmt)
-        return [CommentSchema(id=el.id, text=el.text) for el in comments]
+        return list(await self.session.scalars(stmt))
+
+    async def delete(self, id: int) -> int | None:
+        stmt = delete(Comment).where(Comment.id == id).returning(Comment.id)
+        deleted_id = await self.session.scalar(stmt)
+        await self.session.commit()
+        return deleted_id

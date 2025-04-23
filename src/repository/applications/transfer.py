@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from fastapi import Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 
 from src.schemas.applications.transfer import (
@@ -75,9 +77,14 @@ class TransferApplicationRepository:
 
         created_application.programs = created_programs
         await self.session.commit()
-        await self.session.refresh(created_application)
+        await self.session.refresh(created_application, ["status"])
         return self._create_schema(created_application)
 
     async def get(self, id: int) -> TransferApplicationSchema | None:
-        application = await self.session.get(TransferApplication, id)
+        stmt = (
+            select(TransferApplication)
+            .where(TransferApplication.id == id)
+            .options(joinedload(TransferApplication.status))
+        )
+        application = await self.session.scalar(stmt)
         return None if application is None else self._create_schema(application)

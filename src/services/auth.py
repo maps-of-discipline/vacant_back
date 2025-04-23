@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import grpc
 
@@ -27,6 +27,7 @@ class PermissionRequire:
     async def __call__(
         self,
         token: Annotated[HTTPAuthorizationCredentials, Depends(HTTPBearer())],
+        request: Request,
         user_repo: UserRepository = Depends(),
         auth_grpc_service: AuthGRPCService = Depends(),
         permissions_service: PermissionService = Depends(),
@@ -60,7 +61,11 @@ class PermissionRequire:
             logger.info("User does not have required permissions.")
             raise PermissionsDeniedException()
 
-        if not await self._permissions_service.check(user, payload.permissions):  # type: ignore
+        if not await self._permissions_service.check(
+            user,
+            payload.permissions,
+            request,
+        ):  # type: ignore
             logger.info("User doesn't pass permissions check")
             raise PermissionsDeniedException()
         return user  # type: ignore

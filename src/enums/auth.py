@@ -5,4 +5,9 @@ class PermissionsEnum(str, Enum):
     canCreateSelfApplication = "canCreateSelfApplication"
     canViewOwnApplications = "canViewOwnApplications"
     canCreateManySelfApplications = "canCreateManySelfApplications"
-    canDoSomething2 = "canDoSomething2"
+
+    canViewApplicationsList = "canViewApplicationsList"
+    canChangeApplicationStatus = "canChangeApplicationStatus"
+
+    canViewStuffComments = "canViewStuffComments"
+    canCreateStuffComments = "canCreateStuffComments"

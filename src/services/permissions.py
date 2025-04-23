@@ -1,4 +1,5 @@
-from fastapi import Depends
+from typing import Awaitable, Callable
+from fastapi import Depends, Request
 
 from src.exceptions.auth import PermissionsDeniedException
 from src.grpc.dto.permissions import CreatePermission
@@ -15,9 +16,9 @@ logger = get_logger(__name__)
 class PermissionService:
     def __init__(self, permissions_grpc_service: PermissionsGRPCService = Depends()):
         self.permissions_service = permissions_grpc_service
-        self.mapper: dict = {
-            PermissionsEnum.canCreateManySelfApplications: self._check_self_application_creation
-        }
+        self.mapper: dict[
+            PermissionsEnum, Callable[[UserSchema, Request], Awaitable[bool]]
+        ] = {}
         self.settings = settings
 
     async def create_permissions_if_no_exists(self) -> None:
@@ -50,12 +51,15 @@ class PermissionService:
             logger.debug(f"Permission {k} deleted.")
         logger.info("Permissions synched")
 
-    async def check(self, user: UserSchema, user_permissions: list[str]):
+    async def check(
+        self,
+        user: UserSchema,
+        user_permissions: list[PermissionsEnum],
+        request: Request,
+    ):
         for permission in user_permissions:
-            if permission in self.mapper and not await self.mapper[permission](user):
+            if permission in self.mapper and not await self.mapper[permission](
+                user, request
+            ):
                 return False
-        return True
-
-    async def _check_self_application_creation(self, user: UserSchema) -> bool:
-        # validation user permission in custom way
         return True

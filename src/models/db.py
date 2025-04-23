@@ -28,8 +28,16 @@ session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
 
 
 async def sessionmaker():
-    async with session_factory() as session:
+    """Provide a transactional scope around a series of operations."""
+    session = session_factory()
+    try:
         yield session
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
+    finally:
+        await session.close()
 
 
 class BaseModel(DeclarativeBase):

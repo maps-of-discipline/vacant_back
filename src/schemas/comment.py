@@ -6,6 +6,8 @@ from src.enums.comment import CommentScopeEnum
 class CommentSchema(BaseModel):
     id: int
     text: str
+    scope: CommentScopeEnum
+    by: str
 
 
 class GetApplicationCommentsRequestSchema(BaseModel):

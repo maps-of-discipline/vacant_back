@@ -22,7 +22,7 @@ class TransferApplicationService:
     async def create(
         self, application: CreateTransferApplicationSchema
     ) -> TransferApplicationSchema:
-        status = await self._status_repo.get_by_title(application.status)
+        status = await self._status_repo.get_by_title(str(application.status))
         if not status:
             raise EntityNotFoundHTTPException("Status")
 

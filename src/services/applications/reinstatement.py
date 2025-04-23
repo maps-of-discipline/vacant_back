@@ -8,6 +8,9 @@ from src.schemas.applications.reinstatement import (
     ReinstatementApplicationSchema,
 )
 from src.exceptions.general import ItemNotFoundException
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class ReinstatementApplicationService:
@@ -22,7 +25,7 @@ class ReinstatementApplicationService:
     async def create(
         self, application: CreateReinstatementApplicationSchema
     ) -> ReinstatementApplicationSchema:
-        status = await self._status_repo.get_by_title(application.status)
+        status = await self._status_repo.get_by_title(application.status.value)
         if not status:
             raise EntityNotFoundHTTPException("Status")
 

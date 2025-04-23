@@ -28,6 +28,10 @@ class User(BaseModel):
 
     applications: Mapped["Application"] = relationship()
 
+    @property
+    def fullname(self) -> str:
+        return f"{self.surname} {self.name} {self.patronymic}"
+
 
 class Program(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -139,3 +143,6 @@ class Comment(BaseModel):
     text: Mapped[str] = mapped_column(Text)
     scope: Mapped[str]
     application_id = mapped_column(ForeignKey("application.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+
+    user: Mapped[User] = relationship()

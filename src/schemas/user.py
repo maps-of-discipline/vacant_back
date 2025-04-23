@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 
 
-
 class CreateUserSchema(BaseModel):
     email: str
     name: str
@@ -25,6 +24,14 @@ class CreateUserSchema(BaseModel):
 
 class UserSchema(CreateUserSchema):
     id: str
+
+    @property
+    def fullname(self) -> str:
+        return f"{self.surname} {self.name} {self.patronymic}"
+
+    @property
+    def shotname(self) -> str:
+        return f"{self.surname} {self.name[0]}.{self.patronymic[0]}."
 
 
 class UserForListViewSchema(BaseModel):

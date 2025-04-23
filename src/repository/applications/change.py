@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from fastapi import Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from src.enums.applications import ApplicationStatusEnum as StatusEnum
 from src.schemas.applications.application import ProgramSchema
@@ -71,9 +73,14 @@ class ChangeApplicationRepository:
 
         created_application.programs = created_programs
         await self.session.commit()
-        await self.session.refresh(created_application)
+        await self.session.refresh(created_application, ["status"])
         return self._create_schema(created_application)
 
     async def get(self, id: int) -> ChangeApplicationSchema | None:
-        application = await self.session.get(ChangeApplication, id)
+        stmt = (
+            select(ChangeApplication)
+            .where(ChangeApplication.id == id)
+            .options(joinedload(ChangeApplication.status))
+        )
+        application = await self.session.scalar(stmt)
         return None if application is None else self._create_schema(application)

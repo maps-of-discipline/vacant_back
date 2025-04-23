@@ -1,4 +1,6 @@
+from dataclasses import field
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 from src.enums.applications import ApplicationStatusEnum
@@ -29,7 +31,7 @@ class CreateApplicationSchema(BaseModel):
     no_restrictions_policy_accepted: bool
     reliable_information_policy_accepted: bool
 
-    status: ApplicationStatusEnum
+    status: ApplicationStatusEnum = field(default=ApplicationStatusEnum.new)
     programs: list[CreateProgramSchema]
 
     model_config = ConfigDict(from_attributes=True)
@@ -49,3 +51,7 @@ class ApplicationForListViewSchema(BaseModel):
 
 class DeleteApplicationRequestSchema(BaseModel):
     id: int
+
+
+class ApplicationForStaffListViewSchema(ApplicationForListViewSchema):
+    fio: str

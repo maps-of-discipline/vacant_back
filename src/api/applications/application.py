@@ -1,22 +1,25 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, Path
 from src.schemas.comment import CommentSchema, GetApplicationCommentsRequestSchema
 from src.schemas.user import UserSchema
 from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
-from src.schemas.applications.application import ApplicationForListViewSchema
+from src.schemas.applications.application import (
+    ApplicationForListViewSchema,
+    ApplicationForStaffListViewSchema,
+)
 from src.services.applications.application import ApplicationService
 from src.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-router = APIRouter(prefix="/applications")
+router = APIRouter()
 
 
 @router.get(
-    path="",
+    path="/user",
     tags=["application"],
 )
-async def get_all_applications(
+async def get_users_applications(
     user: UserSchema = Depends(
         Require(
             [
@@ -26,7 +29,7 @@ async def get_all_applications(
     ),
     service: ApplicationService = Depends(),
 ) -> list[ApplicationForListViewSchema]:
-    applications = await service.get_all(user_id=user.id)
+    applications = await service.get_users(user_id=user.id)
     return applications
 
 
@@ -47,10 +50,21 @@ async def delete_application(
     tags=["application"],
 )
 async def get_application_comments(
-    data: GetApplicationCommentsRequestSchema = Body(),
+    user: UserSchema = Depends(Require([])),
+    data: GetApplicationCommentsRequestSchema = Depends(),
     service: ApplicationService = Depends(),
 ) -> list[CommentSchema]:
     logger.info("Start handling get application comments")
-    comments = await service.get_comments(data)
+    comments = await service.get_comments(data, user)
     logger.info("Stop handling get application comments")
     return comments
+
+
+@router.get("/all", tags=["application"])
+async def get_all_applications(
+    service: ApplicationService = Depends(),
+) -> list[ApplicationForStaffListViewSchema]:
+    logger.info("Start handling get all applications")
+    applications = await service.all()
+    logger.info("Stop handling get all applications")
+    return applications

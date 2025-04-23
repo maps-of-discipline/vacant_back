@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from fastapi import Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 
 from src.schemas.applications.reinstatement import (
@@ -65,7 +67,7 @@ class ReinstatementApplicationRepository:
     ) -> ReinstatementApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = ReinstatementApplication(
-            **application.model_dump(exclude={"programs", "type"}),
+            **application.model_dump(exclude={"programs", "type", "status"}),
             status_id=status_id,
         )
 
@@ -80,11 +82,16 @@ class ReinstatementApplicationRepository:
 
         created_application.programs = created_programs
         await self.session.commit()
-        await self.session.refresh(created_application)
+        await self.session.refresh(created_application, ["status"])
         return self._create_schema(created_application)
 
     async def get(self, id: int) -> ReinstatementApplicationSchema | None:
-        application = await self.session.get(ReinstatementApplication, id)
+        stmt = (
+            select(ReinstatementApplication)
+            .where(ReinstatementApplication.id == id)
+            .options(joinedload(ReinstatementApplication.status))
+        )
+        application = await self.session.scalar(stmt)
         if application is None:
             return None
         return self._create_schema(application)
