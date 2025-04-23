@@ -9,6 +9,7 @@ from sqlalchemy.orm import joinedload
 from src.schemas.applications.reinstatement import (
     CreateReinstatementApplicationSchema,
     ReinstatementApplicationSchema,
+    UpdateReinstatementApplicationSchema,
 )
 from src.schemas.applications.application import ProgramSchema
 from src.models.models import Program, ReinstatementApplication
@@ -94,4 +95,41 @@ class ReinstatementApplicationRepository:
         application = await self.session.scalar(stmt)
         if application is None:
             return None
+        return self._create_schema(application)
+
+    async def update(
+        self,
+        data: UpdateReinstatementApplicationSchema,
+        status_id: int,
+    ) -> ReinstatementApplicationSchema | None:
+        stmt = (
+            select(ReinstatementApplication)
+            .where(ReinstatementApplication.id == data.id)
+            .options(
+                joinedload(ReinstatementApplication.programs),
+                joinedload(ReinstatementApplication.status),
+            )
+        )
+
+        application = await self.session.scalar(stmt)
+
+        if application is None:
+            return None
+
+        for key, value in data.model_dump(
+            exclude={"programs", "id", "status", "type"}
+        ).items():
+            setattr(application, key, value)
+
+        application.status_id = status_id
+        self.session.add(application)
+
+        programs = {el.id: el for el in data.programs}
+        for i, program in enumerate(application.programs):
+            for key, value in programs[program.id].model_dump(exclude={"id"}).items():
+                setattr(application.programs[i], key, value)
+
+            self.session.add(application.programs[i])
+        await self.session.commit()
+
         return self._create_schema(application)

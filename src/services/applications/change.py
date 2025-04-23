@@ -6,6 +6,7 @@ from src.repository.status import StatusRepository
 from src.schemas.applications.change import (
     CreateChangeApplicationSchema,
     ChangeApplicationSchema,
+    UpdateChangeApplicationChema,
 )
 from src.exceptions.general import ItemNotFoundException
 
@@ -22,7 +23,7 @@ class ChangeApplicationService:
     async def create(
         self, application: CreateChangeApplicationSchema
     ) -> ChangeApplicationSchema:
-        status = await self._status_repo.get_by_title(str(application.status))
+        status = await self._status_repo.get_by_title(str(application.status.value))
         if not status:
             raise EntityNotFoundHTTPException("Status")
 
@@ -35,4 +36,17 @@ class ChangeApplicationService:
             raise ItemNotFoundException(
                 f"Change application with id[{id}] doesn't exists."
             )
+        return application
+
+    async def update(
+        self, data: UpdateChangeApplicationChema
+    ) -> ChangeApplicationSchema:
+        status = await self._status_repo.get_by_title(str(data.status.value))
+        if not status:
+            raise EntityNotFoundHTTPException("Status")
+
+        application = await self._repo.update(data, status.id)
+        if application is None:
+            raise EntityNotFoundHTTPException("Chage Application")
+
         return application

@@ -9,6 +9,7 @@ from sqlalchemy.orm import joinedload
 from src.schemas.applications.transfer import (
     CreateTransferApplicationSchema,
     TransferApplicationSchema,
+    UpdateTransferApplicationSchema,
 )
 from src.schemas.applications.application import ProgramSchema
 from src.models.models import Program, TransferApplication
@@ -88,3 +89,40 @@ class TransferApplicationRepository:
         )
         application = await self.session.scalar(stmt)
         return None if application is None else self._create_schema(application)
+
+    async def update(
+        self,
+        data: UpdateTransferApplicationSchema,
+        status_id: int,
+    ) -> TransferApplicationSchema | None:
+        stmt = (
+            select(TransferApplication)
+            .where(TransferApplication.id == data.id)
+            .options(
+                joinedload(TransferApplication.programs),
+                joinedload(TransferApplication.status),
+            )
+        )
+
+        application = await self.session.scalar(stmt)
+
+        if application is None:
+            return None
+
+        for key, value in data.model_dump(
+            exclude={"programs", "id", "status", "type"}
+        ).items():
+            setattr(application, key, value)
+
+        application.status_id = status_id
+        self.session.add(application)
+
+        programs = {el.id: el for el in data.programs}
+        for i, program in enumerate(application.programs):
+            for key, value in programs[program.id].model_dump(exclude={"id"}).items():
+                setattr(application.programs[i], key, value)
+
+            self.session.add(application.programs[i])
+        await self.session.commit()
+
+        return self._create_schema(application)

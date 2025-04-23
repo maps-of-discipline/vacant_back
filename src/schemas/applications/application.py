@@ -31,7 +31,9 @@ class CreateApplicationSchema(BaseModel):
     no_restrictions_policy_accepted: bool
     reliable_information_policy_accepted: bool
 
-    status: ApplicationStatusEnum = field(default=ApplicationStatusEnum.new)
+    status: ApplicationStatusEnum = field(
+        default_factory=lambda: ApplicationStatusEnum.new
+    )
     programs: list[CreateProgramSchema]
 
     model_config = ConfigDict(from_attributes=True)

@@ -10,6 +10,7 @@ from src.schemas.applications.application import ProgramSchema
 from src.schemas.applications.change import (
     ChangeApplicationSchema,
     CreateChangeApplicationSchema,
+    UpdateChangeApplicationChema,
 )
 from src.models.models import Program, ChangeApplication
 from src.models.db import sessionmaker
@@ -58,7 +59,7 @@ class ChangeApplicationRepository:
     ) -> ChangeApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = ChangeApplication(
-            **application.model_dump(exclude={"programs", "type"}),
+            **application.model_dump(exclude={"programs", "type", "status"}),
             status_id=status_id,
         )
 
@@ -84,3 +85,40 @@ class ChangeApplicationRepository:
         )
         application = await self.session.scalar(stmt)
         return None if application is None else self._create_schema(application)
+
+    async def update(
+        self,
+        data: UpdateChangeApplicationChema,
+        status_id: int,
+    ) -> ChangeApplicationSchema | None:
+        stmt = (
+            select(ChangeApplication)
+            .where(ChangeApplication.id == data.id)
+            .options(
+                joinedload(ChangeApplication.programs),
+                joinedload(ChangeApplication.status),
+            )
+        )
+
+        application = await self.session.scalar(stmt)
+
+        if application is None:
+            return None
+
+        for key, value in data.model_dump(
+            exclude={"programs", "id", "status", "type"}
+        ).items():
+            setattr(application, key, value)
+
+        application.status_id = status_id
+        self.session.add(application)
+
+        programs = {el.id: el for el in data.programs}
+        for i, program in enumerate(application.programs):
+            for key, value in programs[program.id].model_dump(exclude={"id"}).items():
+                setattr(application.programs[i], key, value)
+
+            self.session.add(application.programs[i])
+        await self.session.commit()
+
+        return self._create_schema(application)

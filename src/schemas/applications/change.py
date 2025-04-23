@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import ConfigDict
 
-from src.schemas.applications.application import CreateApplicationSchema
+from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
 
 
 class RequestCreateChangeApplicationSchema(CreateApplicationSchema):
@@ -16,3 +16,7 @@ class CreateChangeApplicationSchema(RequestCreateChangeApplicationSchema):
 class ChangeApplicationSchema(CreateChangeApplicationSchema):
     id: int
     type: str
+    programs: list[ProgramSchema]
+
+
+class UpdateChangeApplicationChema(ChangeApplicationSchema): ...

@@ -1,4 +1,4 @@
-from src.schemas.applications.application import CreateApplicationSchema
+from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
 
 
 class RequestCreateTransferApplicationSchema(CreateApplicationSchema):
@@ -13,4 +13,7 @@ class CreateTransferApplicationSchema(RequestCreateTransferApplicationSchema):
 class TransferApplicationSchema(CreateTransferApplicationSchema):
     id: int
     type: str
-    status: str
+    programs: list[ProgramSchema]
+
+
+class UpdateTransferApplicationSchema(TransferApplicationSchema): ...

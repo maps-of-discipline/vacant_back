@@ -1,4 +1,4 @@
-from src.schemas.applications.application import CreateApplicationSchema
+from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
 from pydantic import ConfigDict
 
 
@@ -19,4 +19,7 @@ class ReinstatementApplicationSchema(CreateReinstatementApplicationSchema):
     model_config = ConfigDict(from_attributes=True)
     id: int
     type: str
-    status: str
+    programs: list[ProgramSchema]
+
+
+class UpdateReinstatementApplicationSchema(ReinstatementApplicationSchema): ...

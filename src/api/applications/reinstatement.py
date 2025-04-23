@@ -4,11 +4,15 @@ from src.schemas.applications.reinstatement import (
     CreateReinstatementApplicationSchema,
     ReinstatementApplicationSchema,
     RequestCreateReinstatementApplicationSchema,
+    UpdateReinstatementApplicationSchema,
 )
 
 from src.schemas.user import UserSchema
 from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 from src.services.applications.reinstatement import ReinstatementApplicationService
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/reinstatement", tags=["reinstatement"])
 
@@ -40,3 +44,14 @@ async def get_reinstatement_application(
 ) -> ReinstatementApplicationSchema:
     application = await service.get(id)
     return application
+
+
+@router.put("/")
+async def update_application(
+    data: UpdateReinstatementApplicationSchema = Body(),
+    service: ReinstatementApplicationService = Depends(),
+) -> ReinstatementApplicationSchema:
+    logger.info("Start handle update reinstatement application")
+    updated = await service.update(data)
+    logger.info("Stop handle update reinstatement application")
+    return updated
