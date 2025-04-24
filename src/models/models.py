@@ -142,7 +142,7 @@ class Comment(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(Text)
     scope: Mapped[str]
-    application_id = mapped_column(ForeignKey("application.id"))
+    application_id = mapped_column(ForeignKey("application.id", ondelete='CASCADE'))
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     user: Mapped[User] = relationship()

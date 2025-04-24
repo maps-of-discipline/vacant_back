@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -51,6 +51,7 @@ class ApplicationRepository:
             .where(Application.id == id)
             .options(joinedload(Application.status))
         )
+
         application = await self.session.scalar(stmt)
         if not application:
             return None
@@ -118,3 +119,9 @@ class ApplicationRepository:
             )
 
         return applications
+
+    async def update_status(self, id: int, status_id: int) -> None:
+        stmt = (
+            update(Application).where(Application.id == id).values(status_id=status_id)
+        )
+        await self.session.execute(stmt)

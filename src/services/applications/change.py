@@ -9,6 +9,9 @@ from src.schemas.applications.change import (
     UpdateChangeApplicationChema,
 )
 from src.exceptions.general import ItemNotFoundException
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class ChangeApplicationService:

@@ -15,3 +15,9 @@ class MessagesRepository:
             select(CommonMessages).where(CommonMessages.status_id == status_id)
         )
         return list(res)
+
+    async def get(self, id: int) -> CommonMessages | None:
+        res = await self.session.scalar(
+            select(CommonMessages).where(CommonMessages.id == id)
+        )
+        return res

@@ -6,3 +6,4 @@ class ApplicationStatusEnum(str, Enum):
     in_progres = "in progres"
     approved = "approved"
     rejected = "rejected"
+    needs_correction = "needs correction"

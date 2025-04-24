@@ -14,6 +14,9 @@ from src.schemas.applications.change import (
 )
 from src.models.models import Program, ChangeApplication
 from src.models.db import sessionmaker
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class ChangeApplicationRepository:
@@ -120,5 +123,5 @@ class ChangeApplicationRepository:
 
             self.session.add(application.programs[i])
         await self.session.commit()
-
+        await self.session.refresh(application, ["status"])
         return self._create_schema(application)

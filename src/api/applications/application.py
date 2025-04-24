@@ -5,6 +5,7 @@ from src.services.auth import PermissionRequire as Require, PermissionsEnum as p
 from src.schemas.applications.application import (
     ApplicationForListViewSchema,
     ApplicationForStaffListViewSchema,
+    CreateQuickComentRequest,
 )
 from src.services.applications.application import ApplicationService
 from src.logger import get_logger
@@ -68,3 +69,18 @@ async def get_all_applications(
     applications = await service.all()
     logger.info("Stop handling get all applications")
     return applications
+
+
+@router.post("/{id}/quickcomment", tags=["application"])
+async def create_quick_comment(
+    user: UserSchema = Depends(Require([])),
+    id: int = Path(),
+    data: CreateQuickComentRequest = Body(),
+    service: ApplicationService = Depends(),
+) -> CommentSchema:
+    logger.info("Start handling get all applications")
+    new_comment = await service.quickcomment(
+        application_id=id, message_id=data.message_id, user=user
+    )
+    logger.info("Stop handling get all applications")
+    return new_comment

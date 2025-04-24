@@ -57,3 +57,7 @@ class DeleteApplicationRequestSchema(BaseModel):
 
 class ApplicationForStaffListViewSchema(ApplicationForListViewSchema):
     fio: str
+
+
+class CreateQuickComentRequest(BaseModel):
+    message_id: int

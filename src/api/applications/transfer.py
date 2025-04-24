@@ -42,7 +42,7 @@ async def get_transfer_application(
     return application
 
 
-@router.put("/")
+@router.put("")
 async def update_application(
     data: UpdateTransferApplicationSchema = Body(),
     service: TransferApplicationService = Depends(),

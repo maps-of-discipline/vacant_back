@@ -124,5 +124,5 @@ class TransferApplicationRepository:
 
             self.session.add(application.programs[i])
         await self.session.commit()
-
+        await self.session.refresh(application, ["status"])
         return self._create_schema(application)

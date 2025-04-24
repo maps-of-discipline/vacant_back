@@ -1,5 +1,6 @@
 from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
 from pydantic import ConfigDict
+from src.enums import ApplicationStatusEnum
 
 
 class RequestCreateReinstatementApplicationSchema(CreateApplicationSchema):
@@ -20,6 +21,7 @@ class ReinstatementApplicationSchema(CreateReinstatementApplicationSchema):
     id: int
     type: str
     programs: list[ProgramSchema]
+    status: ApplicationStatusEnum
 
 
 class UpdateReinstatementApplicationSchema(ReinstatementApplicationSchema): ...

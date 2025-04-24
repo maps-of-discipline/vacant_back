@@ -1,8 +1,5 @@
-from datetime import datetime
-
-from pydantic import ConfigDict
-
 from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
+from src.enums import ApplicationStatusEnum
 
 
 class RequestCreateChangeApplicationSchema(CreateApplicationSchema):
@@ -17,6 +14,7 @@ class ChangeApplicationSchema(CreateChangeApplicationSchema):
     id: int
     type: str
     programs: list[ProgramSchema]
+    status: ApplicationStatusEnum
 
 
 class UpdateChangeApplicationChema(ChangeApplicationSchema): ...

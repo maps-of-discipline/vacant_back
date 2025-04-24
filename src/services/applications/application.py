@@ -2,9 +2,11 @@ from fastapi import Depends
 
 from src.exceptions.http import EntityNotFoundHTTPException
 from src.repository.comment import CommentRepository
+from src.repository.common_messges import MessagesRepository
 from src.schemas.applications.application import (
     ApplicationForListViewSchema,
     ApplicationForStaffListViewSchema,
+    CreateQuickComentRequest,
 )
 from src.repository.applications.application import ApplicationRepository
 from src.enums.comment import CommentScopeEnum
@@ -17,9 +19,11 @@ class ApplicationService:
         self,
         repo: ApplicationRepository = Depends(),
         comments_repo: CommentRepository = Depends(),
+        message_repo: MessagesRepository = Depends(),
     ) -> None:
         self._repo = repo
         self._comments_repo = comments_repo
+        self._message_repo = message_repo
 
     async def get_users(self, user_id: str) -> list[ApplicationForListViewSchema]:
         applications = await self._repo.all_users(user_id=user_id)
@@ -58,3 +62,24 @@ class ApplicationService:
             )
             for el in comments
         ]
+
+    async def quickcomment(
+        self, application_id, message_id: int, user: UserSchema
+    ) -> CommentSchema:
+        application = await self._repo.get(application_id)
+        if application is None:
+            raise EntityNotFoundHTTPException("Application")
+
+        message = await self._message_repo.get(message_id)
+        if message is None:
+            raise EntityNotFoundHTTPException("Message")
+
+        comment = await self._comments_repo.add(
+            application_id=application.id,
+            scope=CommentScopeEnum.user.value,
+            user=user,
+            text=message.title,
+        )
+
+        await self._repo.update_status(application.id, message.status_id)
+        return comment

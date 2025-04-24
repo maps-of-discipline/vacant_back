@@ -43,7 +43,7 @@ async def get_change_application(
     return application
 
 
-@router.put("/")
+@router.put("")
 async def update_application(
     data: UpdateChangeApplicationChema = Body(),
     service: ChangeApplicationService = Depends(),

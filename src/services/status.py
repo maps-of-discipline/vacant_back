@@ -1,6 +1,7 @@
 from fastapi import Depends
 from src.repository.common_messges import MessagesRepository
 from src.repository.status import StatusRepository
+from src.schemas.message import CommonMessage
 from src.schemas.status import StatusGetListSchema
 
 
@@ -22,7 +23,9 @@ class StatusService:
                 StatusGetListSchema(
                     title=status.title,
                     verbose_name=status.verbose_name,
-                    messages=[el.title for el in messages],
+                    messages=[
+                        CommonMessage(id=el.id, title=el.title) for el in messages
+                    ],
                 )
             )
 

@@ -46,7 +46,7 @@ async def get_reinstatement_application(
     return application
 
 
-@router.put("/")
+@router.put("")
 async def update_application(
     data: UpdateReinstatementApplicationSchema = Body(),
     service: ReinstatementApplicationService = Depends(),

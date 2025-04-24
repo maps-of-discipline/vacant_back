@@ -1,4 +1,5 @@
 from src.schemas.applications.application import CreateApplicationSchema, ProgramSchema
+from src.enums import ApplicationStatusEnum
 
 
 class RequestCreateTransferApplicationSchema(CreateApplicationSchema):
@@ -14,6 +15,7 @@ class TransferApplicationSchema(CreateTransferApplicationSchema):
     id: int
     type: str
     programs: list[ProgramSchema]
+    status: ApplicationStatusEnum
 
 
 class UpdateTransferApplicationSchema(TransferApplicationSchema): ...
