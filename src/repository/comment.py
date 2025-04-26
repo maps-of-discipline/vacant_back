@@ -33,10 +33,12 @@ class CommentRepository:
     async def get_by_application_id(
         self, application_id: int, scope: CommentScopeEnum
     ) -> list[Comment]:
-        stmt = select(Comment).where(
-            Comment.application_id == application_id, Comment.scope == scope
+        stmt = (
+            select(Comment)
+            .where(Comment.application_id == application_id, Comment.scope == scope)
+            .options(joinedload(Comment.user))
         )
-        return list(await self.session.scalars(stmt))
+        return list((await self.session.scalars(stmt)).all())
 
     async def delete(self, id: int) -> int | None:
         stmt = delete(Comment).where(Comment.id == id).returning(Comment.id)

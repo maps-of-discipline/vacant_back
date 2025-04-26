@@ -32,6 +32,9 @@ class User(BaseModel):
     def fullname(self) -> str:
         return f"{self.surname} {self.name} {self.patronymic}"
 
+    @property
+    def shotname(self) -> str:
+        return f"{self.surname} {self.name[0]}.{self.patronymic[0]}."
 
 class Program(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)

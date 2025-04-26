@@ -32,12 +32,12 @@ async def sessionmaker():
     session = session_factory()
     try:
         yield session
-        await session.commit()
     except Exception:
         await session.rollback()
         raise
     finally:
-        await session.close()
+        await session.commit()
+        
 
 
 class BaseModel(DeclarativeBase):
