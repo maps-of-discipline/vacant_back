@@ -20,6 +20,7 @@ dependencies = [
     "grpcio (>=1.71.0,<2.0.0)",
     "grpcio-tools (>=1.71.0,<2.0.0)",
     "transliterate (>=1.10.2,<2.0.0)",
+    "python-multipart (>=0.0.20,<0.0.21)",
 ]
 
 [tool.poetry]
