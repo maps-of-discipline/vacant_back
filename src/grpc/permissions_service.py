@@ -5,7 +5,7 @@ from src.exceptions.grpc import ServiceNotFoundException
 from src.grpc.permissions import permissions_pb2, permissions_pb2_grpc
 from src.grpc.dto import Permission, CreatePermission
 from src.logger import get_logger
-from src.grpc.grpc_manager import BaseGRPCService
+from src.grpc.grpc_servcie import BaseGRPCService
 
 logger = get_logger(__name__)
 

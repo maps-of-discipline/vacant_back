@@ -1,7 +1,7 @@
 from src.grpc.dto.auth import UserData
 
 from src.grpc.auth import auth_pb2_grpc, auth_pb2
-from src.grpc.grpc_manager import BaseGRPCService
+from src.grpc.grpc_servcie import BaseGRPCService
 from src.grpc.dto import TokenPayload
 from src.logger import get_logger
 
