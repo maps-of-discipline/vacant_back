@@ -29,6 +29,9 @@ class AdminApiSettings(BaseModel):
     base_url: str
     service_title: str
 
+class FileStorageSettings(BaseModel):
+    base_dir: str
+
 
 class AuthSettings(BaseModel):
     secret: str
@@ -60,6 +63,7 @@ class Settings(BaseSettings):
     auth: AuthSettings
     logging: LoggingSettings
     grpc: GRPCSettings
+    file_storage: FileStorageSettings
 
 
 settings: Settings = Settings(_env_file=".env")

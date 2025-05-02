@@ -12,6 +12,7 @@ from src.repository.applications.application import ApplicationRepository
 from src.enums.comment import CommentScopeEnum
 from src.schemas.comment import CommentSchema, GetApplicationCommentsRequestSchema
 from src.schemas.user import UserSchema
+from src.services.file import FileService
 
 
 class ApplicationService:
@@ -20,10 +21,12 @@ class ApplicationService:
         repo: ApplicationRepository = Depends(),
         comments_repo: CommentRepository = Depends(),
         message_repo: MessagesRepository = Depends(),
+        file_service: FileService = Depends(),
     ) -> None:
         self._repo = repo
         self._comments_repo = comments_repo
         self._message_repo = message_repo
+        self._file_service = file_service
 
     async def get_users(self, user_id: str) -> list[ApplicationForListViewSchema]:
         applications = await self._repo.all_users(user_id=user_id)
@@ -38,6 +41,7 @@ class ApplicationService:
         if not application:
             raise EntityNotFoundHTTPException("Application")
 
+        await self._file_service.delete_by_application_id(application_id)
         return application
 
     async def get_comments(

@@ -28,7 +28,7 @@ class TransferApplicationRepository:
             id=application.id,
             user_id=application.user_id,
             type=application.type,
-            status=StatusEnum(application.status),
+            status=StatusEnum(application.status.title),
             date=application.date,
             continue_year=application.continue_year,
             hostel_policy_accepted=application.hostel_policy_accepted,
@@ -63,7 +63,7 @@ class TransferApplicationRepository:
     ) -> TransferApplicationSchema:
         application.date = application.date.replace(tzinfo=None)
         created_application = TransferApplication(
-            **application.model_dump(exclude={"programs", "type"}),
+            **application.model_dump(exclude={"programs", "type", "status"}),
             status_id=status_id,
         )
 
@@ -95,6 +95,8 @@ class TransferApplicationRepository:
         data: UpdateTransferApplicationSchema,
         status_id: int,
     ) -> TransferApplicationSchema | None:
+        data.date = data.date.replace(tzinfo=None)
+
         stmt = (
             select(TransferApplication)
             .where(TransferApplication.id == data.id)

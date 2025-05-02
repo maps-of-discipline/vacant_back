@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Body, Depends, Path
+from typing import Annotated
+from fastapi import APIRouter, Body, Depends, Form, Path, UploadFile
 
 from src.schemas.applications.transfer import (
     TransferApplicationSchema,
@@ -18,6 +19,8 @@ router = APIRouter(prefix="/transfer", tags=["transfer"])
 
 @router.post("")
 async def create_transfer_application(
+    application_json: Annotated[str, Form()],
+    files: Annotated[list[UploadFile], Form()],
     user: UserSchema = Depends(
         Require(
             [
@@ -25,11 +28,14 @@ async def create_transfer_application(
             ]
         )
     ),
-    application: RequestCreateTransferApplicationSchema = Body(),
     service: TransferApplicationService = Depends(),
 ) -> TransferApplicationSchema:
+    application = RequestCreateTransferApplicationSchema.model_validate_json(
+        application_json
+    )
     created_application = await service.create(
-        CreateTransferApplicationSchema(**application.model_dump(), user_id=user.id)
+        CreateTransferApplicationSchema(**application.model_dump(), user_id=user.id),
+        files,
     )
     return created_application
 
@@ -44,10 +50,19 @@ async def get_transfer_application(
 
 @router.put("")
 async def update_application(
-    data: UpdateTransferApplicationSchema = Body(),
+    application_json: Annotated[str, Form()],
+    files: Annotated[list[UploadFile], Form()],
+    _: UserSchema = Depends(
+        Require(
+            [
+                p.canCreateSelfApplication,
+            ]
+        )
+    ),
     service: TransferApplicationService = Depends(),
 ) -> TransferApplicationSchema:
+    application = UpdateTransferApplicationSchema.model_validate_json(application_json)
     logger.info("Start handle update transfer application")
-    updated = await service.update(data)
+    updated = await service.update(application, files)
     logger.info("Stop handle update transfer application")
     return updated

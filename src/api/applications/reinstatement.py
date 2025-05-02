@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Body, Depends, Path
+from typing import Annotated
+from fastapi import APIRouter, Body, Depends, Form, Path, UploadFile
 
 from src.schemas.applications.reinstatement import (
     CreateReinstatementApplicationSchema,
@@ -19,6 +20,8 @@ router = APIRouter(prefix="/reinstatement", tags=["reinstatement"])
 
 @router.post("")
 async def create_reinstatement_application(
+    application_json: Annotated[str, Form()],
+    files: Annotated[list[UploadFile], Form()],
     user: UserSchema = Depends(
         Require(
             [
@@ -26,14 +29,17 @@ async def create_reinstatement_application(
             ]
         )
     ),
-    application: RequestCreateReinstatementApplicationSchema = Body(),
     service: ReinstatementApplicationService = Depends(),
 ) -> ReinstatementApplicationSchema:
+    application = RequestCreateReinstatementApplicationSchema.model_validate_json(
+        application_json
+    )
     created_application = await service.create(
         CreateReinstatementApplicationSchema(
             **application.model_dump(),
             user_id=user.id,
-        )
+        ),
+        files,
     )
     return created_application
 
@@ -48,10 +54,21 @@ async def get_reinstatement_application(
 
 @router.put("")
 async def update_application(
-    data: UpdateReinstatementApplicationSchema = Body(),
+    application_json: Annotated[str, Form()],
+    files: Annotated[list[UploadFile], Form()],
     service: ReinstatementApplicationService = Depends(),
+    _: UserSchema = Depends(
+        Require(
+            [
+                p.canCreateSelfApplication,
+            ]
+        )
+    ),
 ) -> ReinstatementApplicationSchema:
+    application = UpdateReinstatementApplicationSchema.model_validate_json(
+        application_json
+    )
     logger.info("Start handle update reinstatement application")
-    updated = await service.update(data)
+    updated = await service.update(application, files)
     logger.info("Stop handle update reinstatement application")
     return updated

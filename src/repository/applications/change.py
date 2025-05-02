@@ -94,6 +94,7 @@ class ChangeApplicationRepository:
         data: UpdateChangeApplicationChema,
         status_id: int,
     ) -> ChangeApplicationSchema | None:
+        data.date = data.date.replace(tzinfo=None)
         stmt = (
             select(ChangeApplication)
             .where(ChangeApplication.id == data.id)
@@ -122,6 +123,7 @@ class ChangeApplicationRepository:
                 setattr(application.programs[i], key, value)
 
             self.session.add(application.programs[i])
+
         await self.session.commit()
         await self.session.refresh(application, ["status"])
         return self._create_schema(application)

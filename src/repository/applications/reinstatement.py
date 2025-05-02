@@ -102,6 +102,7 @@ class ReinstatementApplicationRepository:
         data: UpdateReinstatementApplicationSchema,
         status_id: int,
     ) -> ReinstatementApplicationSchema | None:
+        data.date = data.date.replace(tzinfo=None)
         stmt = (
             select(ReinstatementApplication)
             .where(ReinstatementApplication.id == data.id)
