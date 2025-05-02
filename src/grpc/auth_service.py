@@ -1,11 +1,7 @@
-import grpc
-from fastapi import Depends
-
-
 from src.grpc.dto.auth import UserData
 
 from src.grpc.auth import auth_pb2_grpc, auth_pb2
-from src.grpc.grpc_manager import get_auth_service
+from src.grpc.grpc_manager import BaseGRPCService
 from src.grpc.dto import TokenPayload
 from src.logger import get_logger
 
@@ -13,10 +9,8 @@ from src.logger import get_logger
 logger = get_logger(__name__)
 
 
-class AuthGRPCService:
-    def __init__(self, auth_grpc_stub=Depends(get_auth_service)) -> None:
-        self._stub = auth_grpc_stub
-        logger.debug(self._stub)
+class AuthGRPCService(BaseGRPCService):
+    stub_class = auth_pb2_grpc.AuthServiceStub
 
     async def get_payload(self, jwt_token: str) -> TokenPayload:
         logger.debug("GRPC: Getting payload from auth service")

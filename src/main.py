@@ -9,7 +9,6 @@ from src.api import router as api_router
 from src.settings import settings
 from src.services.permissions import PermissionService
 from src.grpc.permissions_service import PermissionsGRPCService
-from src.grpc.grpc_manager import get_channel_manager, get_permissions_service
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -19,16 +18,12 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     try:
         logger.info("Lifespan: stating initialization...")
-        stub = get_permissions_service()
-        grpc_service = PermissionsGRPCService(stub)
-        service = PermissionService(grpc_service)
-        await service.create_permissions_if_no_exists()
-        logger.info("Lifespan: initialization complete.")
+        async with PermissionService() as service:
+            await service.create_permissions_if_no_exists()
+            logger.info("Lifespan: initialization complete.")
     except Exception as e:
         logger.error(f"Lifespan: Error occured during initialization: {e}")
     yield
-    manager = get_channel_manager()
-    await manager.close_all_channels()
 
 
 app = FastAPI(

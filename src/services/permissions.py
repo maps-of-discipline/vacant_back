@@ -14,12 +14,20 @@ logger = get_logger(__name__)
 
 
 class PermissionService:
-    def __init__(self, permissions_grpc_service: PermissionsGRPCService = Depends()):
-        self.permissions_service = permissions_grpc_service
+    def __init__(self):
         self.mapper: dict[
             PermissionsEnum, Callable[[UserSchema, Request], Awaitable[bool]]
         ] = {}
+
+        self.permissions_service: PermissionsGRPCService
         self.settings = settings
+
+    async def __aenter__(self):
+        self.permissions_service = await PermissionsGRPCService().__aenter__()
+        return self
+
+    async def __aexit__(self, type, meassage, traceback):
+        await self.permissions_service.__aexit__(type, meassage, traceback)
 
     async def create_permissions_if_no_exists(self) -> None:
         logger.info("Permissions syncing on startup application...")

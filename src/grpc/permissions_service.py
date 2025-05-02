@@ -1,21 +1,17 @@
 import grpc
 from grpc.aio import AioRpcError
-from fastapi import Depends
 
 from src.exceptions.grpc import ServiceNotFoundException
-from src.grpc.permissions import permissions_pb2
+from src.grpc.permissions import permissions_pb2, permissions_pb2_grpc
 from src.grpc.dto import Permission, CreatePermission
 from src.logger import get_logger
-from src.grpc.grpc_manager import get_permissions_service
+from src.grpc.grpc_manager import BaseGRPCService
 
 logger = get_logger(__name__)
 
 
-class PermissionsGRPCService:
-    def __init__(
-        self, permission_stub=Depends(get_permissions_service)
-    ) -> None:
-        self._stub = permission_stub
+class PermissionsGRPCService(BaseGRPCService):
+    stub_class = permissions_pb2_grpc.PermissionServiceStub
 
     async def get_permissions(self, service_name: str) -> list[Permission]:
         try:
