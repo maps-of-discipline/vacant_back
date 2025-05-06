@@ -3,13 +3,14 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
+from src.exceptions.http import EntityNotFoundHTTPException
 from src.models.db import sessionmaker
 from src.schemas.applications.application import (
     ApplicationForListViewSchema,
     ApplicationForStaffListViewSchema,
 )
-from src.schemas.user import UserForListViewSchema
-from src.models.models import Application, User
+from src.schemas.status import StatusSchema
+from src.models.models import Application, Status, User
 from src.enums.applications import ApplicationStatusEnum
 
 
@@ -36,6 +37,7 @@ class ApplicationRepository:
                     date=application.date,
                     type=application.type,
                     status=ApplicationStatusEnum(application.status.title),
+                    status_verbose_name=application.status.verbose_name,
                     hostel_policy_accepted=application.hostel_policy_accepted,
                     vacation_policy_viewed=application.vacation_policy_viewed,
                     no_restrictions_policy_accepted=application.no_restrictions_policy_accepted,
@@ -65,6 +67,7 @@ class ApplicationRepository:
             date=application.date,
             type=application.type,
             status=ApplicationStatusEnum(application.status.title),
+            status_verbose_name=application.status.verbose_name,
             hostel_policy_accepted=application.hostel_policy_accepted,
             vacation_policy_viewed=application.vacation_policy_viewed,
             no_restrictions_policy_accepted=application.no_restrictions_policy_accepted,
@@ -85,6 +88,7 @@ class ApplicationRepository:
             date=application.date,
             type=application.type,
             status=ApplicationStatusEnum(application.status.title),
+            status_verbose_name=application.status.verbose_name,
             hostel_policy_accepted=application.hostel_policy_accepted,
             vacation_policy_viewed=application.vacation_policy_viewed,
             no_restrictions_policy_accepted=application.no_restrictions_policy_accepted,
@@ -111,6 +115,7 @@ class ApplicationRepository:
                     fio=application.user.fullname,
                     type=application.type,
                     status=ApplicationStatusEnum(application.status.title),
+                    status_verbose_name=application.status.verbose_name,
                     hostel_policy_accepted=application.hostel_policy_accepted,
                     vacation_policy_viewed=application.vacation_policy_viewed,
                     no_restrictions_policy_accepted=application.no_restrictions_policy_accepted,
@@ -120,8 +125,25 @@ class ApplicationRepository:
 
         return applications
 
-    async def update_status(self, id: int, status_id: int) -> None:
+    async def update_status(
+        self, id: int, status: ApplicationStatusEnum | int
+    ) -> StatusSchema:
+        stmt = select(Status)
+
+        if isinstance(status, ApplicationStatusEnum):
+            stmt = stmt.where(Status.title == status.value)
+        elif isinstance(status, int):
+            stmt = stmt.where(Status.id == status)
+
+        status_ = await self.session.scalar(stmt)
+        if not status_:
+            raise EntityNotFoundHTTPException("Status")
+
         stmt = (
-            update(Application).where(Application.id == id).values(status_id=status_id)
+            update(Application).where(Application.id == id).values(status_id=status_.id)
         )
         await self.session.execute(stmt)
+
+        return StatusSchema(
+            id=status_.id, title=status_.title, verbose_name=status_.verbose_name
+        )

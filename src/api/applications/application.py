@@ -6,6 +6,7 @@ from src.schemas.applications.application import (
     ApplicationForListViewSchema,
     ApplicationForStaffListViewSchema,
     CreateQuickComentRequest,
+    UpdateApplicationStatusRequest,
 )
 from src.services.applications.application import ApplicationService
 from src.logger import get_logger
@@ -84,3 +85,15 @@ async def create_quick_comment(
     )
     logger.info("Stop handling get all applications")
     return new_comment
+
+
+@router.post("/{id}/update-status", tags=["application"])
+async def update_application_status(
+    id: int,
+    user: UserSchema = Depends(Require([])),
+    data: UpdateApplicationStatusRequest = Body(),
+    service: ApplicationService = Depends(),
+) -> None:
+    logger.info("Start handling update application status")
+    await service.update_status(application_id=id, status=data.status, user=user)
+    logger.info("Stop handling update application status")

@@ -29,8 +29,20 @@ class AdminApiSettings(BaseModel):
     base_url: str
     service_title: str
 
+
 class FileStorageSettings(BaseModel):
     base_dir: str
+
+
+class EmailCreadentials(BaseModel):
+    host: str
+    port: int
+    sender: str
+    password: str
+
+
+class NotificationsSettings(BaseModel):
+    email: EmailCreadentials
 
 
 class AuthSettings(BaseModel):
@@ -64,6 +76,7 @@ class Settings(BaseSettings):
     logging: LoggingSettings
     grpc: GRPCSettings
     file_storage: FileStorageSettings
+    notifications: NotificationsSettings
 
 
 settings: Settings = Settings(_env_file=".env")

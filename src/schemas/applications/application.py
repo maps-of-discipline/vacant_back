@@ -44,6 +44,7 @@ class ApplicationForListViewSchema(BaseModel):
     date: datetime
     type: str
     status: str
+    status_verbose_name: str
 
     hostel_policy_accepted: bool
     vacation_policy_viewed: bool
@@ -61,3 +62,7 @@ class ApplicationForStaffListViewSchema(ApplicationForListViewSchema):
 
 class CreateQuickComentRequest(BaseModel):
     message_id: int
+
+
+class UpdateApplicationStatusRequest(BaseModel):
+    status: ApplicationStatusEnum

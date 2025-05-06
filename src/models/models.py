@@ -26,6 +26,8 @@ class User(BaseModel):
     passport_issued_code: Mapped[str]
     passport_issued_date: Mapped[datetime]
 
+    send_email: Mapped[bool] = mapped_column(default=True)
+
     applications: Mapped["Application"] = relationship()
 
     @property
@@ -35,6 +37,7 @@ class User(BaseModel):
     @property
     def shotname(self) -> str:
         return f"{self.surname} {self.name[0]}.{self.patronymic[0]}."
+
 
 class Program(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -145,7 +148,7 @@ class Comment(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(Text)
     scope: Mapped[str]
-    application_id = mapped_column(ForeignKey("application.id", ondelete='CASCADE'))
+    application_id = mapped_column(ForeignKey("application.id", ondelete="CASCADE"))
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     user: Mapped[User] = relationship()

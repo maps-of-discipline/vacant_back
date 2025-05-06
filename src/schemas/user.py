@@ -21,6 +21,8 @@ class CreateUserSchema(BaseModel):
     passport_issued_code: str = Field(default="None")
     passport_issued_date: datetime = Field(default_factory=datetime.now)
 
+    send_email: bool = Field(default=True)
+
 
 class UserSchema(CreateUserSchema):
     id: str

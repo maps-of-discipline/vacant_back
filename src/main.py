@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.api import router as api_router
 from src.settings import settings
 from src.services.permissions import PermissionService
-from src.grpc.permissions_service import PermissionsGRPCService
 from src.logger import get_logger
 
 logger = get_logger(__name__)

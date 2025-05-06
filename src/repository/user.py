@@ -41,6 +41,7 @@ class UserRepository:
             passport_issued_by=user.passport_issued_by,
             passport_issued_code=user.passport_issued_code,
             passport_issued_date=user.passport_issued_date,
+            send_email=user.send_email,
         )
 
     async def get(self, id: str) -> UserSchema | None:

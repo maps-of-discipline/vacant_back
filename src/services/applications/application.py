@@ -1,5 +1,6 @@
-from fastapi import Depends
+from fastapi import BackgroundTasks, Depends
 
+from src.enums.applications import ApplicationStatusEnum
 from src.exceptions.http import EntityNotFoundHTTPException
 from src.repository.comment import CommentRepository
 from src.repository.common_messges import MessagesRepository
@@ -13,11 +14,13 @@ from src.enums.comment import CommentScopeEnum
 from src.schemas.comment import CommentSchema, GetApplicationCommentsRequestSchema
 from src.schemas.user import UserSchema
 from src.services.file import FileService
+from src.services.notificator import NotificationService
 
 
 class ApplicationService:
     def __init__(
         self,
+        tasks: BackgroundTasks,
         repo: ApplicationRepository = Depends(),
         comments_repo: CommentRepository = Depends(),
         message_repo: MessagesRepository = Depends(),
@@ -27,6 +30,7 @@ class ApplicationService:
         self._comments_repo = comments_repo
         self._message_repo = message_repo
         self._file_service = file_service
+        self._background_tasks = tasks
 
     async def get_users(self, user_id: str) -> list[ApplicationForListViewSchema]:
         applications = await self._repo.all_users(user_id=user_id)
@@ -86,4 +90,22 @@ class ApplicationService:
         )
 
         await self._repo.update_status(application.id, message.status_id)
+
+        notification_service = NotificationService(user, self._background_tasks)
+        notification_service.status_changed(application, user)
+
         return comment
+
+    async def update_status(
+        self, application_id: int, status: ApplicationStatusEnum, user: UserSchema
+    ) -> None:
+        application = await self._repo.get(application_id)
+        if not application:
+            raise EntityNotFoundHTTPException("Application")
+
+        new_status = await self._repo.update_status(application.id, status)
+        application.status = new_status.title
+        application.status_verbose_name = new_status.verbose_name
+
+        notification_service = NotificationService(user, self._background_tasks)
+        notification_service.status_changed(application, user)
