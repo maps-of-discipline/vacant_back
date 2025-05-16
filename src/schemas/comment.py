@@ -8,6 +8,8 @@ class CommentSchema(BaseModel):
     text: str
     scope: CommentScopeEnum
     by: str
+    by_id: str
+    
 
 
 class GetApplicationCommentsRequestSchema(BaseModel):

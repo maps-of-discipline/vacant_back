@@ -28,4 +28,6 @@ class CommentService:
         if res is None:
             raise EntityNotFoundHTTPException("Comment")
 
-    
+    async def get_all_by_user(self, user_id: str) -> dict[int, list[CommentSchema]]:
+        comments = await self._comment_repo.all_related_to_user(user_id)
+        return comments

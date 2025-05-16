@@ -67,6 +67,7 @@ class Application(BaseModel):
     reliable_information_policy_accepted: Mapped[bool]
 
     programs: Mapped[list[Program]] = relationship(lazy="selectin")
+    comments: Mapped[list["Comment"]] = relationship(lazy="selectin")
 
     user: Mapped[User] = relationship()
 

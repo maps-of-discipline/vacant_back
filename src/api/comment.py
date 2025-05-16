@@ -32,3 +32,14 @@ async def create_comment(
     new_comment = await service.create(user, data)
     logger.info("Stop comment creation request handling")
     return new_comment
+
+
+@router.get("/users")
+async def get_users_comments(
+    user: UserSchema = Depends(Require([])),
+    service: CommentService = Depends(),
+) -> dict[int, list[CommentSchema]]:
+    logger.info("Start get users comments request handling")
+    comments = await service.get_all_by_user(user.id)
+    logger.info("Stop get users comments request handling")
+    return comments

@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 
 from src.enums.comment import CommentScopeEnum
 from src.models.db import sessionmaker
-from src.models.models import Comment
+from src.models.models import Application, Comment
 from src.schemas.comment import CommentSchema
 from src.schemas.user import UserSchema
 
@@ -28,6 +28,7 @@ class CommentRepository:
             text=comment.text,
             scope=CommentScopeEnum(comment.scope),
             by=user.shotname,
+            by_id=user.id,
         )
 
     async def get_by_application_id(
@@ -45,3 +46,26 @@ class CommentRepository:
         deleted_id = await self.session.scalar(stmt)
         await self.session.commit()
         return deleted_id
+
+    async def all_related_to_user(self, user_id: str) -> dict[int, list[CommentSchema]]:
+        stmt = (
+            select(Application.id, Comment)
+            .join(Application.comments)
+            .where((Application.user_id == user_id) & (Comment.scope == "user"))
+            .options(joinedload(Comment.user))
+        )
+        comments: dict[int, list[CommentSchema]] = {}
+        for application_id, comment in await self.session.execute(stmt):
+            if application_id not in comments:
+                comments.update({application_id: []})
+
+            schema = CommentSchema(
+                id=comment.id,
+                text=comment.text,
+                scope=CommentScopeEnum(comment.scope),
+                by=comment.user.shotname,
+                by_id=comment.user_id,
+            )
+            comments[application_id].append(schema)
+
+        return comments

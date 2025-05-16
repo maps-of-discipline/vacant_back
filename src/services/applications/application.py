@@ -66,7 +66,8 @@ class ApplicationService:
                 id=el.id,
                 text=el.text,
                 scope=CommentScopeEnum(el.scope),
-                by=user.shotname,
+                by=el.user.shotname,
+                by_id=el.user.id,
             )
             for el in comments
         ]
