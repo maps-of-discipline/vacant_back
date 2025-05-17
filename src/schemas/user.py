@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 
@@ -7,12 +8,10 @@ class CreateUserSchema(BaseModel):
     name: str
     surname: str
     patronymic: str
+
     phone: str | None
     snils: str | None
-    group: str | None = Field(default=None)
-    course: int | None
 
-    sex: str = Field(default="None")
     birtdate: datetime = Field(default_factory=datetime.now)
     passport_series: str = Field(default="None")
 
@@ -20,6 +19,16 @@ class CreateUserSchema(BaseModel):
     passport_issued_by: str = Field(default="None")
     passport_issued_code: str = Field(default="None")
     passport_issued_date: datetime = Field(default_factory=datetime.now)
+
+    sex: Optional[str]
+    study_status: Optional[str]
+    degree_level: Optional[str]
+    study_group: Optional[str]
+    specialization: Optional[str]
+    finance: Optional[str]
+    form: Optional[str]
+    enter_year: Optional[str]
+    course: Optional[str]
 
     send_email: bool = Field(default=True)
 

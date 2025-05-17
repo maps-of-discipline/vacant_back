@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -24,3 +25,12 @@ class UserData:
     login: str
     last_login: str
     created_at: str
+    sex: str
+    study_status: str
+    degree_level: str
+    study_group: str
+    specialization: str
+    finance: str
+    form: str
+    enter_year: str
+    course: str

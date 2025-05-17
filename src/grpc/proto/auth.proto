@@ -36,4 +36,13 @@ message GetUserResponse {
   string login = 10;
   string last_login = 11;
   string created_at = 12;
+  string sex = 13;
+  string study_status = 14;
+  string degree_level = 15;
+  string study_group = 16;
+  string specialization = 17;
+  string finance = 18;
+  string form = 19;
+  string enter_year = 20;
+  string course = 21;
 }

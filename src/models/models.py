@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import String, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -15,10 +16,7 @@ class User(BaseModel):
     phone: Mapped[str | None]
 
     snils: Mapped[str | None]
-    group: Mapped[str | None]
-    course: Mapped[int | None]
 
-    sex: Mapped[str]
     birtdate: Mapped[datetime]
     passport_series: Mapped[str]
     passport_birthplace: Mapped[str]
@@ -27,6 +25,16 @@ class User(BaseModel):
     passport_issued_date: Mapped[datetime]
 
     send_email: Mapped[bool] = mapped_column(default=True)
+
+    sex: Mapped[Optional[str]] = mapped_column(nullable=True)
+    study_status: Mapped[Optional[str]] = mapped_column(nullable=True)
+    degree_level: Mapped[Optional[str]] = mapped_column(nullable=True)
+    study_group: Mapped[Optional[str]] = mapped_column(nullable=True)
+    specialization: Mapped[Optional[str]] = mapped_column(nullable=True)
+    finance: Mapped[Optional[str]] = mapped_column(nullable=True)
+    form: Mapped[Optional[str]] = mapped_column(nullable=True)
+    enter_year: Mapped[Optional[str]] = mapped_column(nullable=True)
+    course: Mapped[Optional[str]] = mapped_column(nullable=True)
 
     applications: Mapped["Application"] = relationship()
 

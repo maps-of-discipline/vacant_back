@@ -42,4 +42,14 @@ class AuthGRPCService(BaseGRPCService):
             login=response.login,
             last_login=response.last_login,
             created_at=response.created_at,
+            #
+            sex=response.sex,
+            study_status=response.study_status,
+            degree_level=response.degree_level,
+            study_group=response.study_group,
+            specialization=response.specialization,
+            finance=response.finance,
+            form=response.form,
+            enter_year=response.enter_year,
+            course=response.course,
         )

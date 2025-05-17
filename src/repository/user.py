@@ -3,7 +3,7 @@ import uuid
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import exists, select
+from sqlalchemy import exists, select, update
 from sqlalchemy.orm import joinedload
 
 
@@ -31,8 +31,6 @@ class UserRepository:
             surname=user.surname,
             patronymic=user.patronymic,
             phone=user.phone,
-            course=user.course,
-            group=user.group,
             snils=user.snils,
             sex=user.sex,
             birtdate=user.birtdate,
@@ -41,7 +39,15 @@ class UserRepository:
             passport_issued_by=user.passport_issued_by,
             passport_issued_code=user.passport_issued_code,
             passport_issued_date=user.passport_issued_date,
+            course=user.course,
             send_email=user.send_email,
+            study_group=user.study_group,
+            study_status=user.study_status,
+            degree_level=user.degree_level,
+            specialization=user.specialization,
+            finance=user.finance,
+            form=user.form,
+            enter_year=user.enter_year,
         )
 
     async def get(self, id: str) -> UserSchema | None:
@@ -74,3 +80,8 @@ class UserRepository:
         await self.session.commit()
         await self.session.refresh(created_user)
         return self._create_schema(created_user)
+
+    async def update(self, user: UserSchema) -> None:
+        stmt = update(User).where(User.id == user.id).values(**user.model_dump())
+        await self.session.execute(stmt)
+        await self.session.commit()
