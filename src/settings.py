@@ -77,6 +77,7 @@ class Settings(BaseSettings):
     grpc: GRPCSettings
     file_storage: FileStorageSettings
     notifications: NotificationsSettings
+    maps_base_url: str
 
 
 settings: Settings = Settings(_env_file=".env")

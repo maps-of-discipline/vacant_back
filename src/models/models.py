@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import String, ForeignKey, Table, Column, Text
+from sqlalchemy import Boolean, Float, Integer, String, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.db import BaseModel
@@ -57,8 +57,42 @@ class Program(BaseModel):
     sem_num: Mapped[int | None]
     university: Mapped[str]
 
+    with_low_course: Mapped[bool] = mapped_column(default=False)
+
     application_id: Mapped[int] = mapped_column(
         ForeignKey("application.id", ondelete="CASCADE")
+    )
+
+
+class DisciplineVariant(BaseModel):
+    target_id: Mapped[int] = mapped_column(
+        ForeignKey("discipline.id"), primary_key=True
+    )
+    variant_id: Mapped[int] = mapped_column(
+        ForeignKey("discipline.id"), primary_key=True
+    )
+    similarity: Mapped[float]
+    choosen: Mapped[int]  # Indicates if this variant has been chosen
+
+
+class Discipline(BaseModel):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    program_id: Mapped[int] = mapped_column(ForeignKey("program.id"))
+    title: Mapped[str]
+    amount: Mapped[float]
+    control: Mapped[str]
+    coursework: Mapped[str]
+    elective_group: Mapped[str]
+    period: Mapped[int]
+    zet: Mapped[int]
+
+    # Define the relationship with back_populates to make it bidirectional
+    variants: Mapped[list["Discipline"]] = relationship(
+        "Discipline",
+        secondary="discipline_variant",
+        primaryjoin="Discipline.id == DisciplineVariant.target_id",
+        secondaryjoin="Discipline.id == DisciplineVariant.variant_id",
+        backref="original_disciplines",
     )
 
 
