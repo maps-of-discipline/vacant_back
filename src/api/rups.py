@@ -15,7 +15,7 @@ router = APIRouter(prefix="/rups", tags=["rups"])
 async def get_all_statuses(
     service: RupService = Depends(),
     data: GetRupDataSchema = Body(),
-) -> RupData:
+):
     logger.info("Start handle get status list")
     res = await service.get_rup_data(data)
     logger.info("Stop handle get status list")

@@ -66,33 +66,37 @@ class Program(BaseModel):
 
 class DisciplineVariant(BaseModel):
     target_id: Mapped[int] = mapped_column(
-        ForeignKey("discipline.id"), primary_key=True
+        ForeignKey("discipline.id", ondelete="CASCADE"), primary_key=True
     )
     variant_id: Mapped[int] = mapped_column(
-        ForeignKey("discipline.id"), primary_key=True
+        ForeignKey("discipline.id", ondelete="CASCADE"), primary_key=True
     )
     similarity: Mapped[float]
     choosen: Mapped[int]  # Indicates if this variant has been chosen
 
+    target: Mapped["Discipline"] = relationship(
+        "Discipline", foreign_keys=[target_id], back_populates="variant_associations"
+    )
+
 
 class Discipline(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
-    program_id: Mapped[int] = mapped_column(ForeignKey("program.id"))
+    program_id: Mapped[int] = mapped_column(
+        ForeignKey("program.id", ondelete="CASCADE")
+    )
     title: Mapped[str]
     amount: Mapped[float]
     control: Mapped[str]
-    coursework: Mapped[str]
-    elective_group: Mapped[str]
+    coursework: Mapped[bool]
+    elective_group: Mapped[int | None]
     period: Mapped[int]
     zet: Mapped[int]
 
-    # Define the relationship with back_populates to make it bidirectional
-    variants: Mapped[list["Discipline"]] = relationship(
-        "Discipline",
-        secondary="discipline_variant",
-        primaryjoin="Discipline.id == DisciplineVariant.target_id",
-        secondaryjoin="Discipline.id == DisciplineVariant.variant_id",
-        backref="original_disciplines",
+    # Association object relationships
+    variant_associations: Mapped[list["DisciplineVariant"]] = relationship(
+        "DisciplineVariant",
+        foreign_keys=[DisciplineVariant.target_id],
+        back_populates="target",
     )
 
 
