@@ -67,3 +67,9 @@ class GetRupDataResponseSchema(BaseModel):
     similar: list[RupDiscipline]
     best_match: dict[str, BestMatchValue]
     choosen: dict[str, ChoosenValueSchema]
+
+
+class SetChoosenRequestSchema(BaseModel):
+    target_id: int
+    variant_id: int
+    value: bool

@@ -11,6 +11,7 @@ from src.schemas.rups import (
     GetRupDataResponseSchema,
     GetRupDataSchema,
     RupDiscipline,
+    SetChoosenRequestSchema,
 )
 
 
@@ -152,3 +153,8 @@ class RupService:
                 source_disciplines,
                 discipline.variants,
             )
+
+    async def set_choosen(self, data: SetChoosenRequestSchema) -> None:
+        await self._disc_repo.set_choosen(
+            target_id=data.target_id, variant_id=data.variant_id, value=data.value
+        )

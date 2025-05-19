@@ -1,4 +1,4 @@
-from sqlalchemy import delete, insert, select
+from sqlalchemy import and_, delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 from sqlalchemy.orm import joinedload
@@ -63,4 +63,18 @@ class DisciplineRepository:
 
     async def delete_by_program_id(self, program_id: int) -> None:
         stmt = delete(Discipline).where(Discipline.program_id == program_id)
+        await self.session.execute(stmt)
+
+    async def set_choosen(self, target_id: int, variant_id: int, value: bool) -> None:
+        stmt = (
+            update(DisciplineVariant)
+            .where(
+                and_(
+                    DisciplineVariant.target_id == target_id,
+                    DisciplineVariant.variant_id == variant_id,
+                )
+            )
+            .values(choosen=value)
+        )
+
         await self.session.execute(stmt)
