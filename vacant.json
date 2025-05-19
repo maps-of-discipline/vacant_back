@@ -1,0 +1,1084 @@
+{
+  "source": [
+    {
+      "title": "Теория информации",
+      "period": 1,
+      "zet": 3,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Инструменты визуализации данных",
+      "period": 2,
+      "zet": 3,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Композиционный дизайн",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Введение в профессию",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Технологии прикладного программирования",
+      "period": 2,
+      "zet": 3,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 108,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Аппаратное обеспечение информационных систем",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Проектирование интерфейсов информационных систем",
+      "period": 2,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Объектно-ориентированное программирование",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Системы управления разработкой программного обеспечения",
+      "period": 3,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Навыки эффективной презентации",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Офисные приложения",
+      "period": 1,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Технологии прикладного программирования (КП)",
+      "period": 2,
+      "zet": 3,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Введение в программирование",
+      "period": 1,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Тайм-менеджмент",
+      "period": 2,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Разработка игровых приложений",
+      "period": 5,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 1,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Теория вероятностей и математическая статистика",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "XR-технологии",
+      "period": 6,
+      "zet": 3,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": 3,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Разработка технологической документации",
+      "period": 1,
+      "zet": 4,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Конфликтология",
+      "period": 3,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Философия",
+      "period": 2,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Архитектура информационных систем",
+      "period": 5,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 1,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "UI/UX-дизайн",
+      "period": 6,
+      "zet": 3,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": 2,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Операционные системы",
+      "period": 2,
+      "zet": 2,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Учебная практика (проектно-технологическая)",
+      "period": 2,
+      "zet": 2,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Технологии сетевого вещания",
+      "period": 7,
+      "zet": 3,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": 4,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Инфографика",
+      "period": 7,
+      "zet": 3,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": 4,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Объектно-ориентированное программирование (КП)",
+      "period": 3,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Численные методы в компьютерных вычислениях",
+      "period": 2,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Анализ программного кода",
+      "period": 6,
+      "zet": 3,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": 3,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Анализ экономической эффективности цифровых решений",
+      "period": 3,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    }
+  ],
+  "target": [
+    {
+      "title": "Учебная практика (проектная)",
+      "period": 2,
+      "zet": 2,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Безопасность операционных систем Windows (КП)",
+      "period": 3,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Архитектура вычислительных систем",
+      "period": 1,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Разработка технических текстов и документации",
+      "period": 3,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Технологии и методы программирования",
+      "period": 2,
+      "zet": 2,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы проектирования информационных систем",
+      "period": 2,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Математическая логика и теория алгоритмов в программировании",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Архитектура вычислительных систем (КП)",
+      "period": 1,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Организационное и правовое обеспечение информационной безопасности",
+      "period": 2,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Безопасность операционных систем Windows",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Программирование криптографических алгоритмов",
+      "period": 4,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 1,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Проектирование и администрирование баз данных (КП)",
+      "period": 2,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Методы и средства криптографической защиты информации",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы информационно-коммуникационных технологий",
+      "period": 1,
+      "zet": 2,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Специальные главы математики",
+      "period": 3,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Сети и системы передачи информации",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы информационной безопасности",
+      "period": 1,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы веб-технологий",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы сетевых технологий",
+      "period": 2,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Языки программирования",
+      "period": 1,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Криптоанализ",
+      "period": 4,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 1,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Компьютерная криминалистика",
+      "period": 7,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 3,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Методология и практики DevOps",
+      "period": 5,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 2,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Проектирование и администрирование баз данных",
+      "period": 1,
+      "zet": 3,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Основы форензики",
+      "period": 7,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 3,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Автоматизация процессов жизненного цикла программных средств",
+      "period": 5,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 2,
+      "similarity": null,
+      "variants": []
+    }
+  ],
+  "same": [
+    {
+      "title": "Основы российской государственности",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Введение в проектную деятельность",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Коммуникации в области информационных технологий",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Математический анализ",
+      "period": 2,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Линейная алгебра",
+      "period": 1,
+      "zet": 3,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 108,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Управление проектами",
+      "period": 2,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    },
+    {
+      "title": "Физическая культура и спорт",
+      "period": 1,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": []
+    }
+  ],
+  "similar": [
+    {
+      "title": "Учебная практика (проектная)",
+      "period": 2,
+      "zet": 2,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Учебная практика (проектно-технологическая)",
+          "period": 2,
+          "zet": 2,
+          "control": "Диф. зачет",
+          "coursework": false,
+          "amount": 72,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Безопасность операционных систем Windows (КП)",
+      "period": 3,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Объектно-ориентированное программирование (КП)",
+          "period": 3,
+          "zet": 4,
+          "control": "Курсовая работа",
+          "coursework": true,
+          "amount": 0,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Архитектура вычислительных систем",
+      "period": 1,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Архитектура информационных систем",
+          "period": 5,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": 1,
+          "similarity": null,
+          "variants": []
+        },
+        {
+          "title": "Аппаратное обеспечение информационных систем",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Разработка технических текстов и документации",
+      "period": 3,
+      "zet": 2,
+      "control": "Зачет",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Разработка технологической документации",
+          "period": 1,
+          "zet": 4,
+          "control": "Зачет",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        },
+        {
+          "title": "Разработка игровых приложений",
+          "period": 5,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": 1,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Технологии и методы программирования",
+      "period": 2,
+      "zet": 2,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 72,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Технологии прикладного программирования",
+          "period": 2,
+          "zet": 3,
+          "control": "Экзамен",
+          "coursework": true,
+          "amount": 108,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Основы проектирования информационных систем",
+      "period": 2,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Архитектура информационных систем",
+          "period": 5,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": 1,
+          "similarity": null,
+          "variants": []
+        },
+        {
+          "title": "Аппаратное обеспечение информационных систем",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Математическая логика и теория алгоритмов в программировании",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Теория вероятностей и математическая статистика",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Архитектура вычислительных систем (КП)",
+      "period": 1,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Объектно-ориентированное программирование (КП)",
+          "period": 3,
+          "zet": 4,
+          "control": "Курсовая работа",
+          "coursework": true,
+          "amount": 0,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Организационное и правовое обеспечение информационной безопасности",
+      "period": 2,
+      "zet": 4,
+      "control": "Диф. зачет",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Аппаратное обеспечение информационных систем",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Безопасность операционных систем Windows",
+      "period": 3,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": true,
+      "amount": 144,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Архитектура информационных систем",
+          "period": 5,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": 1,
+          "similarity": null,
+          "variants": []
+        },
+        {
+          "title": "Аппаратное обеспечение информационных систем",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Программирование криптографических алгоритмов",
+      "period": 4,
+      "zet": 4,
+      "control": "Экзамен",
+      "coursework": false,
+      "amount": 144,
+      "elective_group": 1,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Введение в программирование",
+          "period": 1,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": false,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        },
+        {
+          "title": "Объектно-ориентированное программирование",
+          "period": 3,
+          "zet": 4,
+          "control": "Экзамен",
+          "coursework": true,
+          "amount": 144,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    },
+    {
+      "title": "Проектирование и администрирование баз данных (КП)",
+      "period": 2,
+      "zet": 4,
+      "control": "Курсовая работа",
+      "coursework": true,
+      "amount": 0,
+      "elective_group": null,
+      "similarity": null,
+      "variants": [
+        {
+          "title": "Объектно-ориентированное программирование (КП)",
+          "period": 3,
+          "zet": 4,
+          "control": "Курсовая работа",
+          "coursework": true,
+          "amount": 0,
+          "elective_group": null,
+          "similarity": null,
+          "variants": []
+        }
+      ]
+    }
+  ],
+  "best_match": {
+    "Учебная практика (проектная)": {
+      "target": "Учебная практика (проектно-технологическая)",
+      "similarity": 0.46
+    },
+    "Безопасность операционных систем Windows (КП)": {
+      "target": "Объектно-ориентированное программирование (КП)",
+      "similarity": 0.09
+    },
+    "Архитектура вычислительных систем": {
+      "target": "Аппаратное обеспечение информационных систем",
+      "similarity": 0.1
+    },
+    "Разработка технических текстов и документации": {
+      "target": "Разработка игровых приложений",
+      "similarity": 0.13
+    },
+    "Технологии и методы программирования": {
+      "target": "Технологии прикладного программирования",
+      "similarity": 0.31
+    },
+    "Основы проектирования информационных систем": {
+      "target": "Аппаратное обеспечение информационных систем",
+      "similarity": 0.31
+    },
+    "Математическая логика и теория алгоритмов в программировании": {
+      "target": "Теория вероятностей и математическая статистика",
+      "similarity": 0.21
+    },
+    "Архитектура вычислительных систем (КП)": {
+      "target": "Объектно-ориентированное программирование (КП)",
+      "similarity": 0.11
+    },
+    "Организационное и правовое обеспечение информационной безопасности": {
+      "target": "Аппаратное обеспечение информационных систем",
+      "similarity": 0.12
+    },
+    "Безопасность операционных систем Windows": {
+      "target": "Аппаратное обеспечение информационных систем",
+      "similarity": 0.08
+    },
+    "Программирование криптографических алгоритмов": {
+      "target": "Объектно-ориентированное программирование",
+      "similarity": 0.15
+    },
+    "Проектирование и администрирование баз данных (КП)": {
+      "target": "Объектно-ориентированное программирование (КП)",
+      "similarity": 0.09
+    }
+  }
+}

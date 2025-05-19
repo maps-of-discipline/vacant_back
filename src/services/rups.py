@@ -1,11 +1,17 @@
+from typing import Any
 from fastapi import Depends
 from src.exceptions.general import BadRequest, EntityNotFoundException
-from src.gateways.dto.maps import RupData, RupDiscipline
 from src.gateways.maps import MapsAPIGateway
 from src.models.models import Program
 from src.repository.discipline import DisciplineRepository
 from src.repository.program import ProgramRepository
-from src.schemas.rups import GetRupDataSchema
+from src.schemas.rups import (
+    BestMatchValue,
+    ChoosenValueSchema,
+    GetRupDataResponseSchema,
+    GetRupDataSchema,
+    RupDiscipline,
+)
 
 
 class RupService:
@@ -19,26 +25,105 @@ class RupService:
         self._maps_api = maps_gateway
         self._program_repo = program_repository
 
-    async def get_rup_data(self, rup_data_request: GetRupDataSchema) -> None:
+    async def get_rup_data(
+        self, rup_data_request: GetRupDataSchema
+    ) -> GetRupDataResponseSchema:
         source = await self._program_repo.get_by_aup(rup_data_request.source.num)
         target = await self._program_repo.get_by_aup(rup_data_request.target.num)
 
         if not (source and target):
             raise EntityNotFoundException("One of programs")
 
-        source_disciplines = await self._disc_repo.get_by_program_id(source.id)
-        target_disciplines = await self._disc_repo.get_by_program_id(target.id)
+        source_disciplines = {
+            el.title: el for el in await self._disc_repo.get_by_program_id(source.id)
+        }
+        target_disciplines = {
+            el.title: el for el in await self._disc_repo.get_by_program_id(target.id)
+        }
 
         if len(source_disciplines) == 0 or len(target_disciplines) == 0:
-            rup_data = await self._save_roop_data(rup_data_request, source, target)
-            return rup_data
+            if len(source_disciplines) != 0:
+                await self._disc_repo.delete_by_program_id(source.id)
+            if len(target_disciplines) != 0:
+                await self._disc_repo.delete_by_program_id(target.id)
+
+            await self._save_roop_data(rup_data_request, source, target)
+
+            source_disciplines = {
+                el.title: el
+                for el in await self._disc_repo.get_by_program_id(source.id)
+            }
+            target_disciplines = {
+                el.title: el
+                for el in await self._disc_repo.get_by_program_id(target.id)
+            }
+
+        same = []
+        for title, discipline in [*target_disciplines.items()]:
+            if title in source_disciplines:
+                same.append(discipline)
+                source_disciplines.pop(title)
+                target_disciplines.pop(title)
+
+        similar: list[RupDiscipline] = []
+        best_match: dict[str, BestMatchValue] = {}
+        choosen: dict[str, ChoosenValueSchema] = {}
+
+        for title, discipline in target_disciplines.items():
+            if not discipline.variant_associations:
+                continue
+
+            similar_item = RupDiscipline.from_model(discipline, serialize_variants=True)
+            similar.append(similar_item)
+
+            choosen_variants: dict[str, bool] = {}
+            for variant in discipline.variant_associations:
+                best_variant = best_match.get(
+                    variant.variant.title, BestMatchValue(target="", similarity=0)
+                )
+                choosen_variants.update({variant.variant.title: bool(variant.choosen)})
+                if variant.similarity > best_variant.similarity:
+                    best_match.update(
+                        {
+                            title: BestMatchValue(
+                                target=variant.variant.title,
+                                similarity=variant.similarity,
+                            )
+                        }
+                    )
+
+            choosen.update(
+                {
+                    title: ChoosenValueSchema(
+                        period=discipline.period, variants=choosen_variants
+                    )
+                }
+            )
+
+        source_disciplines = [
+            RupDiscipline.from_model(el, serialize_variants=False)
+            for el in source_disciplines.values()
+        ]
+        target_disciplines = [
+            RupDiscipline.from_model(el, serialize_variants=False)
+            for el in target_disciplines.values()
+        ]
+        same = [RupDiscipline.from_model(el, serialize_variants=False) for el in same]
+        return GetRupDataResponseSchema(
+            source=source_disciplines,
+            target=target_disciplines,
+            same=same,
+            similar=similar,
+            best_match=best_match,
+            choosen=choosen,
+        )
 
     async def _save_roop_data(
         self,
         data: GetRupDataSchema,
         source_program: Program,
         target_program: Program,
-    ) -> RupData:
+    ) -> None:
         rup_data = await self._maps_api.get_rup_data(data)
         maps_source_disciplines = [
             *rup_data.same,
@@ -67,5 +152,3 @@ class RupService:
                 source_disciplines,
                 discipline.variants,
             )
-
-        return rup_data

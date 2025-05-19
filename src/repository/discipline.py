@@ -1,8 +1,8 @@
-from sqlalchemy import insert, select
+from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 from sqlalchemy.orm import joinedload
-from src.gateways.dto.maps import RupDiscipline
+from src.gateways.dto.maps import MapsRupDiscipline
 from src.models.db import sessionmaker
 from src.models.models import Discipline, DisciplineVariant
 from src.schemas.discipline import CreateDisciplineSchema, DisciplineSchema
@@ -15,17 +15,21 @@ class DisciplineRepository:
     async def create(
         self, program_id: int, discipline: CreateDisciplineSchema
     ) -> DisciplineSchema:
-        created = Discipline(**discipline.model_dump())
+        created = Discipline(**discipline.model_dump(), program_id=program_id)
         self.session.add(created)
 
         return DisciplineSchema(id=created.id, **discipline.model_dump())
 
     async def get_by_program_id(self, program_id: int) -> list[Discipline]:
-        stmt = select(Discipline).where(Discipline.program_id == program_id)
-        return list(await self.session.scalars(stmt))
+        stmt = (
+            select(Discipline)
+            .where(Discipline.program_id == program_id)
+            .options(joinedload(Discipline.variant_associations))
+        )
+        return list((await self.session.scalars(stmt)).unique())
 
     async def bukd_save(
-        self, program_id: int, disciplines: list[RupDiscipline]
+        self, program_id: int, disciplines: list[MapsRupDiscipline]
     ) -> list[Discipline]:
         values = []
         for discipline in disciplines:
@@ -42,7 +46,7 @@ class DisciplineRepository:
         self,
         target_discipline: Discipline,
         source_disciplines: dict[str, Discipline],
-        variants: list[RupDiscipline],
+        variants: list[MapsRupDiscipline],
     ) -> None:
         variant_associations = []
         for variant in variants:
@@ -56,3 +60,7 @@ class DisciplineRepository:
             variant_associations.append(association_object)
 
         self.session.add_all(variant_associations)
+
+    async def delete_by_program_id(self, program_id: int) -> None:
+        stmt = delete(Discipline).where(Discipline.program_id == program_id)
+        await self.session.execute(stmt)

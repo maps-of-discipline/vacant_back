@@ -2,8 +2,10 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from src.models.models import Discipline
 
-class RupDiscipline(BaseModel):
+
+class MapsRupDiscipline(BaseModel):
     title: str
     period: int
     zet: float
@@ -13,7 +15,28 @@ class RupDiscipline(BaseModel):
     elective_group: int | None = Field(default=None)
     similarity: Optional[float] = Field(default=None)
 
-    variants: list["RupDiscipline"] = Field(default_factory=list)
+    variants: list["MapsRupDiscipline"] = Field(default_factory=list)
+
+    @classmethod
+    def from_model(
+        cls, model: Discipline, serialize_variants: bool = False
+    ) -> "MapsRupDiscipline":
+        instance = cls(
+            title=model.title,
+            period=model.period,
+            zet=model.zet,
+            control=model.control,
+            coursework=model.coursework,
+            amount=model.amount,
+            elective_group=model.elective_group,
+            similarity=None,
+            variants=[],
+        )
+        if serialize_variants and model.variant_associations:
+            for assoc in model.variant_associations:
+                instance.variants.append(cls.from_model(assoc.variant, False))
+
+        return instance
 
 
 class BestMatchValue(BaseModel):
@@ -22,8 +45,8 @@ class BestMatchValue(BaseModel):
 
 
 class RupData(BaseModel):
-    source: list[RupDiscipline]
-    target: list[RupDiscipline]
-    same: list[RupDiscipline]
-    similar: list[RupDiscipline]
+    source: list[MapsRupDiscipline]
+    target: list[MapsRupDiscipline]
+    same: list[MapsRupDiscipline]
+    similar: list[MapsRupDiscipline]
     best_match: dict[str, BestMatchValue]

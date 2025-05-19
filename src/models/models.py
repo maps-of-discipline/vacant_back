@@ -74,8 +74,8 @@ class DisciplineVariant(BaseModel):
     similarity: Mapped[float]
     choosen: Mapped[int]  # Indicates if this variant has been chosen
 
-    target: Mapped["Discipline"] = relationship(
-        "Discipline", foreign_keys=[target_id], back_populates="variant_associations"
+    variant: Mapped["Discipline"] = relationship(
+        "Discipline", foreign_keys=[variant_id], back_populates="variant_associations"
     )
 
 
@@ -96,7 +96,12 @@ class Discipline(BaseModel):
     variant_associations: Mapped[list["DisciplineVariant"]] = relationship(
         "DisciplineVariant",
         foreign_keys=[DisciplineVariant.target_id],
-        back_populates="target",
+    )
+
+    target: Mapped["DisciplineVariant"] = relationship(
+        "DisciplineVariant",
+        foreign_keys=[DisciplineVariant.variant_id],
+        back_populates="variant",
     )
 
 
