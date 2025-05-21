@@ -1,0 +1,135 @@
+body {
+  font-family: "Times New Roman", Times;
+  margin: 0;
+  padding: 0;
+
+  --font-size: 10.5pt;
+}
+
+@page {
+  size: A4;
+  margin: 1cm;
+}
+
+body p,
+span {
+  font-size: var(--font-size);
+}
+
+body div {
+  font-size: var(--font-size);
+}
+
+body p {
+  margin: 0.5rem 0;
+}
+
+body input {
+  margin-right: 5pt;
+  margin-bottom: 4px;
+}
+
+.flex {
+  display: flex;
+  flex: 1;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.t-indent {
+  text-indent: 2em;
+}
+
+.input-line {
+  display: block;
+  height: 1rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.bold-underline {
+  border-bottom: 2px solid black !important;
+}
+
+.help {
+  font-size: 8pt;
+  margin: 0 auto;
+  margin-bottom: 0.25rem;
+}
+
+.input-underline {
+  display: inline-block;
+  border-bottom: 1px solid black;
+  flex: 1;
+  margin-left: 0.5rem;
+  text-align: center;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}
+
+.header {
+  padding: 0;
+}
+
+.header h2 {
+  font-size: 16pt;
+}
+
+.section {
+  margin-right: 20px;
+}
+
+.section-content {
+  margin-bottom: auto;
+}
+
+.section-1 {
+  width: 30%;
+}
+
+.section-1 p {
+  margin-bottom: 0;
+}
+
+.section-2 {
+  width: 60%;
+}
+
+input[type="checkbox"][checked] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #000;
+  position: relative;
+  display: inline-block;
+}
+
+input[type="checkbox"][checked]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  background-color: #000;
+  display: block;
+}
+
+input[type="checkbox"]:not([checked]) {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #000;
+  background-color: #fff;
+  display: inline-block;
+}
