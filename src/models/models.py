@@ -20,6 +20,7 @@ class User(BaseModel):
 
     birtdate: Mapped[datetime]
     passport_series: Mapped[str]
+    passport_number: Mapped[str]
     passport_birthplace: Mapped[str]
     passport_issued_by: Mapped[str]
     passport_issued_code: Mapped[str]

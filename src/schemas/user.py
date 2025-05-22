@@ -14,7 +14,9 @@ class CreateUserSchema(BaseModel):
     snils: str | None
 
     birtdate: datetime = Field(default_factory=datetime.now)
+
     passport_series: str = Field(default="None")
+    passport_number: str = Field(default="None")
 
     passport_birthplace: str = Field(default="None")
     passport_issued_by: str = Field(default="None")

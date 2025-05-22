@@ -1,4 +1,4 @@
-from fastapi import Depends, status
+from fastapi import Body, Depends, status
 from fastapi.routing import APIRouter
 
 
@@ -27,3 +27,15 @@ async def create_external_user(
 @router.post("/me")
 async def get_user_info(user: UserSchema = Depends(Require([]))) -> UserSchema:
     return user
+
+
+@router.put("")
+async def update_user(
+    _: UserSchema = Depends(Require([])),
+    update_user: UserSchema = Body(),
+    service: UserService = Depends(),
+) -> UserSchema:
+    logger.info("Start handle update user reuest")
+    updated_user = await service.update(update_user)
+    logger.info("Stop handle update user reuest")
+    return updated_user

@@ -36,6 +36,7 @@ class UserRepository:
             sex=user.sex,
             birtdate=user.birtdate,
             passport_series=user.passport_series,
+            passport_number=user.passport_number,
             passport_birthplace=user.passport_birthplace,
             passport_issued_by=user.passport_issued_by,
             passport_issued_code=user.passport_issued_code,
@@ -82,7 +83,19 @@ class UserRepository:
         await self.session.refresh(created_user)
         return self._create_schema(created_user)
 
-    async def update(self, user: UserSchema) -> None:
-        stmt = update(User).where(User.id == user.id).values(**user.model_dump())
-        await self.session.execute(stmt)
+    async def update(self, user: UserSchema) -> UserSchema | None:
+        user.passport_issued_date = user.passport_issued_date.replace(tzinfo=None)
+        user.birtdate = user.birtdate.replace(tzinfo=None)
+        stmt = (
+            update(User)
+            .where(User.id == user.id)
+            .values(**user.model_dump(exclude={"type_"}), type=user.type_)
+            .returning(User)
+        )
+        updated_user = await self.session.execute(stmt)
+        updated_user = updated_user.scalar()
+        if not updated_user:
+            return None
+
         await self.session.commit()
+        return self._create_schema(updated_user)

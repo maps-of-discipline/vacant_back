@@ -3,7 +3,10 @@ from transliterate import translit
 
 
 from src.exceptions.general import EntityAlreadyExists, EntityNotFoundException
-from src.exceptions.http import EntityAlreadyExistsHTTPException
+from src.exceptions.http import (
+    EntityAlreadyExistsHTTPException,
+    EntityNotFoundHTTPException,
+)
 from src.gateways.dto import CreateAdminApiUser
 from src.models.models import User
 from src.repository.user import UserRepository
@@ -61,3 +64,9 @@ class UserService:
         )
 
         return created_user
+
+    async def update(self, user: UserSchema) -> UserSchema:
+        updated_user = await self.user_repo.update(user)
+        if not updated_user:
+            raise EntityNotFoundHTTPException("User")
+        return updated_user
