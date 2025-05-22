@@ -28,6 +28,9 @@ WORKDIR /app
 
 COPY --from=builder /wheels /wheels
 
+RUN apt-get update && apt-get install -y \ 
+  libglib2.0-0
+
 RUN pip install --no-cache-dir --no-index --find-links=/wheels uvicorn \
   && pip install --no-cache-dir --no-index --find-links=/wheels -r /wheels/requirements.txt \
   && rm -rf /wheels
