@@ -28,8 +28,11 @@ WORKDIR /app
 
 COPY --from=builder /wheels /wheels
 
-RUN apt-get update && apt-get install -y \ 
-  libglib2.0-0
+RUN apt-get update && apt-get install -y gcc libpq-dev \
+    libpango-1.0-0 libpangoft2-1.0-0 gir1.2-harfbuzz-0.0 && \
+    apt clean && \
+    rm -rf /var/cache/apt/*
+
 
 RUN pip install --no-cache-dir --no-index --find-links=/wheels uvicorn \
   && pip install --no-cache-dir --no-index --find-links=/wheels -r /wheels/requirements.txt \
