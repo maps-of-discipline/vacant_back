@@ -24,7 +24,7 @@ class DisciplineRepository:
         stmt = (
             select(Discipline)
             .where(Discipline.program_id == program_id)
-            .options(joinedload(Discipline.variant_associations))
+            .options(joinedload(Discipline.variants))
         )
         return list((await self.session.scalars(stmt)).unique())
 

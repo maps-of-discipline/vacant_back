@@ -32,8 +32,8 @@ class MapsRupDiscipline(BaseModel):
             similarity=None,
             variants=[],
         )
-        if serialize_variants and model.variant_associations:
-            for assoc in model.variant_associations:
+        if serialize_variants and model.variants:
+            for assoc in model.variants:
                 instance.variants.append(cls.from_model(assoc.variant, False))
 
         return instance

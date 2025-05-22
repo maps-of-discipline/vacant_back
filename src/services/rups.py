@@ -11,6 +11,8 @@ from src.schemas.rups import (
     GetRupDataResponseSchema,
     GetRupDataSchema,
     RupDiscipline,
+    RupDisciplineVariant,
+    RupSameDiscipline,
     SetChoosenRequestSchema,
 )
 
@@ -66,19 +68,19 @@ class RupService:
                 source_disciplines.pop(title)
                 target_disciplines.pop(title)
 
-        similar: list[RupDiscipline] = []
+        similar: list[RupSameDiscipline] = []
         best_match: dict[str, BestMatchValue] = {}
         choosen: dict[str, ChoosenValueSchema] = {}
 
         for title, discipline in target_disciplines.items():
-            if not discipline.variant_associations:
+            if not discipline.variants:
                 continue
 
-            similar_item = RupDiscipline.from_model(discipline, serialize_variants=True)
+            similar_item = RupSameDiscipline.from_model(discipline)
             similar.append(similar_item)
 
             choosen_variants: dict[str, bool] = {}
-            for variant in discipline.variant_associations:
+            for variant in discipline.variants:
                 best_variant = best_match.get(
                     variant.variant.title, BestMatchValue(target="", similarity=0)
                 )
@@ -86,8 +88,8 @@ class RupService:
                 if variant.similarity > best_variant.similarity:
                     best_match.update(
                         {
-                            title: BestMatchValue(
-                                target=variant.variant.title,
+                            variant.variant.title: BestMatchValue(
+                                target=title,
                                 similarity=variant.similarity,
                             )
                         }
@@ -102,14 +104,12 @@ class RupService:
             )
 
         source_disciplines = [
-            RupDiscipline.from_model(el, serialize_variants=False)
-            for el in source_disciplines.values()
+            RupDiscipline.from_model(el) for el in source_disciplines.values()
         ]
         target_disciplines = [
-            RupDiscipline.from_model(el, serialize_variants=False)
-            for el in target_disciplines.values()
+            RupDiscipline.from_model(el) for el in target_disciplines.values()
         ]
-        same = [RupDiscipline.from_model(el, serialize_variants=False) for el in same]
+        same = [RupDiscipline.from_model(el) for el in same]
         return GetRupDataResponseSchema(
             source=source_disciplines,
             target=target_disciplines,
