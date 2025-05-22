@@ -85,6 +85,7 @@ class PermissionRequire:
             UserSchema(
                 id=admin_api_user.id,
                 email=admin_api_user.email,
+                type_=admin_api_user.type,
                 name=admin_api_user.name,
                 surname=admin_api_user.surname,
                 patronymic=admin_api_user.patronymic,
@@ -117,6 +118,7 @@ class PermissionRequire:
             "form",
             "enter_year",
             "course",
+            "type",
         }
 
         has_changes = False

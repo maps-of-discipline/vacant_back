@@ -16,6 +16,7 @@ class UserData:
     id: str
     external_id: str
     role: str
+    type: str
     external_role: str
     name: str
     surname: str

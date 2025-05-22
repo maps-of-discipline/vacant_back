@@ -142,7 +142,6 @@ class RupService:
         target_disciplines = await self._disc_repo.bukd_save(
             target_program.id, maps_target_disciplines
         )
-        print(target_disciplines)
         source_disciplines = {el.title: el for el in source_disciplines}
         target_disciplines = {el.title: el for el in target_disciplines}
 

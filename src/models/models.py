@@ -14,6 +14,7 @@ class User(BaseModel):
     surname: Mapped[str]
     patronymic: Mapped[str]
     phone: Mapped[str | None]
+    type: Mapped[str]
 
     snils: Mapped[str | None]
 

@@ -31,6 +31,7 @@ class AdminApiUser:
     patronymic: str
     email: str
     login: str
+    type_: str
 
     @staticmethod
     def from_response(response: Response) -> "AdminApiUser":
@@ -45,6 +46,7 @@ class AdminApiUser:
             patronymic=user_data["patronymic"],
             email=user_data["email"],
             login=user_data["login"],
+            type_=user_data["type_"],
         )
 
 

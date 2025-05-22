@@ -27,6 +27,7 @@ class UserRepository:
         return UserSchema(
             id=user.id,
             email=user.email,
+            type_=user.type,
             name=user.name,
             surname=user.surname,
             patronymic=user.patronymic,

@@ -25,14 +25,13 @@ class ApplicationRendered:
     ) -> BytesIO:
         template = self.env.get_template("index.html")
         css_path = self.template_dir / "style.css"
-        pprint({"user": user.model_dump(), "application": application.model_dump()})
         html_content = template.render(
-        user=user,
-        application=application,  # Pass application directly to the template
-        context={  # Fix the typo in variable name
-            "user": user.model_dump(),
-            "application": application.model_dump(),
-        },
+            user=user,
+            application=application,  # Pass application directly to the template
+            context={  # Fix the typo in variable name
+                "user": user.model_dump(),
+                "application": application.model_dump(),
+            },
         )
         pdf_file = BytesIO()
         HTML(string=html_content, base_url=str(self.template_dir)).write_pdf(

@@ -33,6 +33,7 @@ class AuthGRPCService(BaseGRPCService):
             id=response.id,
             external_id=response.external_id,
             role=response.role,
+            type=response.type,
             external_role=response.external_role,
             name=response.name,
             surname=response.surname,

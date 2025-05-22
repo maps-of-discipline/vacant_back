@@ -45,4 +45,5 @@ message GetUserResponse {
   string form = 19;
   string enter_year = 20;
   string course = 21;
+  string type = 22;
 }

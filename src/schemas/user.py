@@ -8,6 +8,7 @@ class CreateUserSchema(BaseModel):
     name: str
     surname: str
     patronymic: str
+    type_: str
 
     phone: str | None
     snils: str | None

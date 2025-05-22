@@ -37,7 +37,6 @@ class DisciplineRepository:
             value["program_id"] = program_id
             values.append(value)
 
-        __import__("pprint").pprint(values)
 
         stmt = insert(Discipline).values(values).returning(Discipline)
         return [el[0] for el in await self.session.execute(stmt)]
