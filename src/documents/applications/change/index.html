@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>asdf</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="content flex flex-column" style="margin-top: 10px">
+      <div class="header flex">
+        <div class="flex flex-column section section-1">
+          <div class="section-content">
+            <p>Москвоский политех</p>
+            <div class="flex flex">
+              <span>Договор №</span>
+              <div class="input-underline"></div>
+            </div>
+            <div class="flex">
+              <span>От</span>
+              <div class="input-underline"></div>
+            </div>
+          </div>
+        </div>
+        <div class="section section-2">
+          <h2 style="margin-top: 0">
+            Проректору по учебной работе Г.Х. Шарипзяновой
+          </h2>
+          <div class="flex flex-column">
+            <div class="flex">
+              <span>От</span>
+              <div class="input-underline">{{ user.surname }}</div>
+            </div>
+            <span class="help">(фамилия)</span>
+          </div>
+          <div class="flex flex-column">
+            <div class="input-underline">{{ user.name }}</div>
+            <span class="help">(имя)</span>
+          </div>
+          <div class="flex flex-column">
+            <div class="input-underline">{{ user.patronymic }}</div>
+            <span class="help">(отчество)</span>
+          </div>
+          <div class="flex">
+            <span>Учебная группа</span>
+            <div class="input-underline">{{ user.group }}</div>
+          </div>
+          <div class="flex">
+            <span>Курс</span>
+            <div class="input-underline">
+              {{ application.programs[0].sem_num }}
+            </div>
+            <span style="margin-left: 5px">Семестр</span>
+            <div class="input-underline">
+              {{ application.programs[0].sem_num }}
+            </div>
+          </div>
+          <div class="flex">
+            <span>Контактный Телефон</span>
+            <div class="input-underline">{{ user.phone }}</div>
+          </div>
+          <div class="flex">
+            <span>Адрес электронной почты</span>
+            <div class="input-underline" style="font-size: 10pt">
+              {{ user.email }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="m-auto" style="margin-top: 1rem">ЗАЯВЛЕНИЕ</h2>
+        <p class="t-indent" style="word-break: normal">
+          Прошу с « » ___________ 20____г. изменить мне условия обучения
+          (направление подготовки (специальность), форму или основу обучения) в
+          связи с
+        </p>
+      <div class="input-underline input-line">{{ application.purpose }}</div>
+      <p class="bold">В настоящее время обучаюсь: </p>
+
+      <div class="flex">
+        <div class="flex">
+          <input
+            type="checkbox"
+            {% if application.programs[0].university=="Москва" %} checked {% endif %}
+          />
+          <span>В головной университет</span>
+        </div>
+        <div class="flex">
+          <input
+            type="checkbox"
+            {% if application.programs[0].university != "Москва" %} checked {% endif %}
+          />
+          <span>В филиале</span>
+          <div class="input-underline">
+            {% if application.programs[0].university != 'Москва'%} {{application.programs[1].university}} {% endif %}
+          </div>
+        </div>
+      </div>
+      <p>Направление подготовки (специальность):</p>
+      <div class="flex">
+        <span class="bold">Код: </span>
+        <div class="input-underline">{{ application.programs[0].okso }}</div>
+        <span class="bold">Наименование: </span>
+        <div class="input-underline" style="flex: 2">{{ application.programs[0].profile }}</div>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td class="bold">Форма обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == 'Очная' %} checked {% endif %}>
+              <span>Очная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == 'Очно-заочная' %} checked {% endif %}>
+              <span>Очно-заочная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == 'Заочная' %} checked {% endif %}>
+              <span>Заочная;</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="bold">Основа обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].base == 'Бюджетная' %} checked {% endif %}>
+              <span>бюджетая;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].base == 'Платная' %} checked {% endif %}>
+              <span>платно-договорная;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="bold" style="margin-top: 1rem;">Желаемые условия обучения: </p>
+      <div class="flex">
+        <div class="flex">
+          <input
+            type="checkbox"
+            {% if application.programs[1].university=="Москва" %} checked {% endif %}
+          />
+          <span>В головной университет</span>
+        </div>
+        <div class="flex">
+          <input
+            type="checkbox"
+            {% if application.programs[1].university != "Москва" %} checked {% endif %}
+          />
+          <span>В филиале</span>
+          <div class="input-underline">
+            {% if application.programs[1].university != 'Москва'%} {{application.programs[1].university}} {% endif %}
+          </div>
+        </div>
+      </div>
+      <p class="m-0 p-0">Для продолжения обучения <span class="bold">на {{ application.programs[1].sem_num }} семестре {{ application.programs[1].sem_num }}</span> курса;</p>
+      <p>Направление подготовки (специальность):</p>
+      <div class="flex">
+        <span class="bold">Код: </span>
+        <div class="input-underline">{{ application.programs[1].okso }}</div>
+        <span class="bold">Наименование: </span>
+        <div class="input-underline" style="flex: 2">{{ application.programs[1].profile }}</div>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td class="bold">Форма обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[1].form == 'Очная' %} checked {% endif %}>
+              <span>Очная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[1].form == 'Очно-заочная' %} checked {% endif %}>
+              <span>Очно-заочная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[1].form == 'Заочная' %} checked {% endif %}>
+              <span>Заочная;</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="bold">Основа обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[1].base == 'Бюджетная' %} checked {% endif %}>
+              <span>бюджетая;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[1].base == 'Платная' %} checked {% endif %}>
+              <span>платно-договорная;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <p style="margin-top: 1rem;">В случае невозможности рассмотрения на выбранное направление, прошу рассмотреть:</p>
+      <p class="m-0">Для продолжения обучения <span class="bold">на {{application.programs[2].sem_num }} семестре {{application.programs[2].sem_num }}</span> курса;</p>
+      <p>Направление подготовки (специальность):</p>
+      <div class="flex">
+        <span class="bold">Код: </span>
+        <div class="input-underline">{{ application.programs[2].okso }}</div>
+        <span class="bold">Наименование: </span>
+        <div class="input-underline" style="flex: 2">{{ application.programs[2].profile }}</div>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td class="bold">Форма обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[2].form == 'Очная' %} checked {% endif %}>
+              <span>Очная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[2].form == 'Очно-заочная' %} checked {% endif %}>
+              <span>Очно-заочная;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[2].form == 'Заочная' %} checked {% endif %}>
+              <span>Заочная;</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="bold">Основа обучения:</td>
+            <td>
+              <input type='checkbox' {% if application.programs[2].base == 'Бюджетная' %} checked {% endif %}>
+              <span>бюджетая;</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[2].base == 'Платная' %} checked {% endif %}>
+              <span>платно-договорная;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+      <div class="flex">
+        <div class="flex" style="width: 80%; flex: 2">
+          <p>Ознакомлен, что общежитие предоставляется при наличии свободного жилого фонда после подачи заявки в личном кабинете обучающегося в соответствии с очередностью</p>
+        </div>
+        <div class="flex flex-column" style="justify-content: end; width: 15%">
+          <div class="input-underline" style="width: 200%"></div>
+          <span class="help">(подпись)</span>
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="flex" style="width: 80%; flex: 2">
+          <p>С положением о заполнении вакантных мест ознакомлен и согласен </p>
+        </div>
+        <div class="flex flex-column" style="justify-content: end; width: 15%">
+          <div class="input-underline" style="width: 200%"></div>
+          <span class="help">(подпись)</span>
+        </div>
+      </div>
+      
+      <div class="flex">
+        <div class="flex" style="width: 80%; flex: 2">
+          <p>
+            Подтверждаю отсутствие ограничений, предусмотренных для освоения
+            образовательной программы за счет бюджетных ассигнований
+          </p>
+        </div>
+        <div class="flex flex-column" style="justify-content: end; width: 15%">
+          <div class="input-underline" style="width: 200%"></div>
+          <span class="help">(подпись)</span>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex" style="width: 80%; flex: 2">
+          <p>
+            Ознакомлен с необходимостью указания в заявлении достоверных
+            сведений и представления подлинных документов, подаваемых для
+            зачисления
+          </p>
+        </div>
+        <div class="flex flex-column" style="justify-content: end; width: 15%">
+          <div class="input-underline" style="width: 200%"></div>
+          <span class="help">(подпись)</span>
+        </div>
+      </div>
+
+      <div class="flex" style="margin-top: 1rem">
+        <div class="flex" style="">
+          <div class="flex flex-column">
+            <span style="text-decoration: underline"
+              >«{{application.date.day}}» ____{{application.date.month}}____
+              {{application.date.year}} г.</span
+            >
+            <span class="help" style="margin: 0; margin-left: 20%">(дата)</span>
+          </div>
+        </div>
+        <div class="flex" style="width: 50%; flex: 2">
+          <div class="flex flex-column">
+            <div
+              class="input-underline"
+              style="width: 45%; margin-top: 1rem"
+            ></div>
+            <span class="help">(подпись)</span>
+          </div>
+          <div class="flex flex-column">
+            <div class="input-underline" style="width: 45%"></div>
+            <span class="help">(расшифровка подписи)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

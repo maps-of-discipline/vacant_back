@@ -53,146 +53,193 @@
           </div>
         </div>
       </div>
-        <h2 class="m-auto" style='margin-top: 1rem;'>ЗАЯВЛЕНИЕ</h2>
-        <p class="t-indent">
-          Прошу в соответствии с «Порядком перевода обучающегося в другую
-          образовательную организацию, реализующую образовательную программу
-          высшего образования соответствующего уровня» (утвержден приказом
-          Минобрнауки России от 12 июля 2021 года № 607) зачислить меня
+      <!---->
+      <!-- заявление       -->
+      <!---->
+      <h2 class="m-auto" style='margin-top: 1rem;'>ЗАЯВЛЕНИЕ</h2>
+      <div class="flex flex-column" style="width: 100%">
+        <div class="flex">
+          <span class='t-indent'>Прошу восстановить меня на направление подготовки (специальность)</span>
+          <div class="input-underline"></div>
+        </div>
+        <div class="input-underline">{{ application.programs[1].okso }}</div>
+      </div>
+
+      <div class="flex flex-column" style='width: 100%'>
+        <div class="flex">
+          <span>образовательная программа (профиль)</span>
+          <div class="input-underline"></div>
+        </div>
+        <div class="input-underline">{{ application.programs[1].profile }}</div>
+      </div>
+      <div class="flex flex-column">
+        <p style="margin-bottom: 0;">
+          по <span class="bold" {% if application.programs[1].form == 'Очная'%}style='text-decoration: underline;'{% endif%}>очной</span> / 
+          <span class="bold" {% if application.programs[1].form == 'Очно-заочная'%}style='text-decoration: underline;'{% endif%}>очно-заочной</span> /
+          <span class="bold"{% if application.programs[1].form == 'Заочная'%}style='text-decoration: underline;'{% endif%}>заочной</span> 
+          форме обучения на 
+          <span class="bold"{% if application.programs[1].base == 'Бюджетная'%}style='text-decoration: underline;'{% endif%}>бюджетной</span> / 
+          <span class="bold"{% if application.programs[1].base == 'Платная'%}style='text-decoration: underline;'{% endif%}>платной</span> договорной основе
         </p>
         <div class="flex">
-          <div class="flex">
-            <input type="checkbox" {% if application.programs[1].university == 'Москва'%}checked{% endif %}/>
-            <span>В головной университет</span>
-          </div>
-          <div class="flex">
-            <input type="checkbox" {% if application.programs[1].university != 'Москва'%}checked{% endif %}/>
-            <span>В филиал</span>
-            <div class="input-underline" >{% if application.programs[1].university != 'Москва'%}{{application.programs[1].university}}{% endif %}</div>
-          </div>
+          <span class="help">(нужное подчеркнуть)</span>
+        </div>
+      </div>
+      <span>В случае невозможности рассмотрения на выбранное направление, прошу рассмотреть на</span>
+      <div class="flex">
+        <span>направление подготовки (специальность)</span>
+        <div class="input-underline">{{ application.programs[2].okso }}</div>
+      </div>
+      <div class="flex">
+        <span>образовательная программа (профиль)</span>
+        <div class="input-underline">{{ application.programs[2].profile }}</div>
+      </div>
+      <div class="flex flex-column">
+        <p style="margin-bottom: 0;">
+          по <span class="bold" {% if application.programs[2].form == 'Очная'%}style='text-decoration: underline;'{% endif%}>очной</span> / 
+          <span class="bold" {% if application.programs[2].form == 'Очно-заочная'%}style='text-decoration: underline;'{% endif%}>очно-заочной</span> /
+          <span class="bold"{% if application.programs[2].form == 'Заочная'%}style='text-decoration: underline;'{% endif%}>заочной</span> 
+          форме обучения на 
+          <span class="bold"{% if application.programs[2].base == 'Бюджетная'%}style='text-decoration: underline;'{% endif%}>бюджетной</span> / 
+          <span class="bold"{% if application.programs[2].base == 'Платная'%}style='text-decoration: underline;'{% endif%}>платной</span> договорной основе
+        </p>
+        <div class="flex">
+          <span class="help">(нужное подчеркнуть)</span>
+        </div>
+      </div>
+      <div class="flex flex-column" >
+        <div class="flex">
+          <input type="checkbox" {% if application.purpose == "continue_study" %} checked {% endif %}> 
+          <span>для продолжения обучения на {{application.programs[1].sem_num }} семестре {{ application.programs[1].sem_num }} курса;</span>
         </div>
         <div class="flex">
-          <span
-            >в порядке перевода на направление подготовки (специальность)</span
-          >
-          <div class="input-underline"></div>
+          <input type="checkbox" {% if application.purpose != "continue_study" %} checked {% endif %}> 
+          <span>для подготовки и прохождения итоговой государственной (итоговой) аттестации:</span>
         </div>
         <div class="flex">
-          <div class="input-underline input-line">{{application.programs[1].okso}}</div>
+          <input type="checkbox" style="margin-left: 1rem;" {% if application.is_vacation_need and application.purpose != "continue_study" %} checked {% endif %}> 
+          <span>с предоставлением каникул в пределах срока освоения образовательной программы;*</span>
         </div>
         <div class="flex">
-          <span>образовательная программа (профиль)</span>
-          <div class="input-underline"></div>
+          <input type="checkbox" style="margin-left: 1rem;" {% if not application.is_vacation_need and application.purpose != "continue_study" %} checked {% endif %}%> 
+          <span>без предоставления каникул в пределах срока освоения образовательной программы.**</span>
         </div>
-        <div class="flex">
-          <div class="input-underline input-line">{{application.programs[1].profile}}</div>
-        </div>
-        <div class="flex flex-column">
-          <p style="margin-bottom: 0;">
-            по <span class="bold" {% if application.programs[1].form == 'Очная'%}style='text-decoration: underline;'{% endif%}>очной</span> / 
-            <span class="bold" {% if application.programs[1].form == 'Очно-заочная'%}style='text-decoration: underline;'{% endif%}>очно-заочной</span> /
-            <span class="bold"{% if application.programs[1].form == 'Заочная'%}style='text-decoration: underline;'{% endif%}>заочной</span> 
-            форме обучения на 
-            <span class="bold"{% if application.programs[1].base == 'Бюджетная'%}style='text-decoration: underline;'{% endif%}>бюджетной</span> / 
-            <span class="bold"{% if application.programs[1].base == 'Платная'%}style='text-decoration: underline;'{% endif%}>платной</span> договорной основе
-          </p>
-          <div class="flex">
-            <span class="help">(нужное подчеркнуть)</span>
-          </div>
-        </div>
-        <div class="flex flex-column">
-          <span>В случае невозможности рассмотрения на выбранное направление, прошу рассмотреть на</span>
-          <div class="flex" style='width: 100%;'>
-            <span>направление подготовки (специальность)</span>
-            <div class="input-underline">{{application.programs[2].okso}}</div>
-          </div>
-        </div>
-        <div class="flex">
-          <span>образовательная программа (профиль)</span>
-          <div class="input-underline">{{application.programs[2].profile}}</div>
-        </div>
-        {% if not application.continue_year %}
-        <div class="flex">
-          <input type='checkbox' checked>
-          <span>для продолжения обучения на {{2 - application.programs[1].sem_num % 2}} семестре {{ ((application.programs[1].sem_num + 1) // 2)}} курса;</span>
-        </div>
-        <div class="flex">
-          <input type='checkbox'/>
-          <span>для продолжения обучения на ___ годе обучения (только для обучающихся в аспирантуре).</span>
-        </div>
-        {% endif %}
-        {% if application.continue_year %}
-        <div class="flex">
-          <input type='checkbox'>
-          <span>для продолжения обучения на ___ семестре ___ курса;</span>
-        </div>
-        <div class="flex">
-          <input type='checkbox' checked/>
-          <span>для продолжения обучения на {{ application.continue_year }} годе обучения (только для обучающихся в аспирантуре).</span>
-        </div>
-        {% endif %}
-        <div class="flex flex-column">
-          <div class='flex'style='width: 100%'>
-            <span class="bold">Обучаюсь:</span>
-            <div class="bold-underline input-underline bold ">{{ application.programs[0].university }}</div>
-          </div>
-          <span class="bol help">(название образовательной организации высшего образования)</span>
-        </div> 
-        <div class="flex">
-          <div class="flex flex-column">
-            <span class="bold">Форма обучения</span>
-            <div class="flex">
-              <input type="checkbox" {% if application.programs[0].form == 'Очная'%}checked{% endif%}/>
-              <span>очная</span>
-            </div>
-            <div class="flex">
-              <input type="checkbox"{% if application.programs[0].form == 'Очно-заочная'%}checked{% endif%}/>
-              <span>очно-заочная</span>
-            </div>
-            <div class="flex">
-              <input type="checkbox"{% if application.programs[0].form == 'Заочная'%}checked{% endif%}/>
-              <span>заочная</span>
-            </div>
-          </div>
-          <div class="flex flex-column" style="margin-bottom: auto;">
-            <span class="bold">Основа обучения</span>
-            <div class="flex">
-              <input type="checkbox" {% if application.programs[0].base == 'Бюджетная'%}checked{% endif%}/>
-              <span>бюджетная</span>
-            </div>
-            <div class="flex">
-              <input type="checkbox" {% if application.programs[0].base == 'Платная'%}checked{% endif%}/>
-              <span>платная договорная</span>
-            </div>
-          </div>
-          <div class="flex flex-column" style="margin-bottom: auto; width: 30%; justify-content: start;">
-            <span class="bold m-auto" style='margin-bottom: 0px;'>Год поступления</span>
-            <div class="input-underline" style='width: 100%'></div>
-          </div>
-        </div>
-        <p><span class='bold'>Направление/специальность подготовки</span> (полностью)</p>
-        <div class="flex">
-          <div class="flex" style='width: 35%; flex: 1; margin-right: 1rem;'>
-            <span>Код: </span>
-            <div class="input-underline">{{ application.programs[0].okso}}</div>
-          </div> 
-          <div class="flex" style="flex: 2;">
-            <span>Наименование: </span>
-            <div class="input-underline">{{ application.programs[0].profile }}</div>
-          </div> 
-        </div>
-        <div class="flex flex-column" style="margin-top: 0.5rem;">
-          <span style="margin-bottom: 0.25rem">Приложение: </span>
-          <div class="flex">
-            <input type="checkbox" checked/>
-            <span>справка о периоде обучении на ___ листах;</span>
-          </div>
-          <div class="flex">
-            <input type="checkbox" checked/>
-            <span>копия паспорта.</span>
-          </div>
-        </div>
+      </div>
 
+      <p><span class="bold">Ранее обучался:</span> <i style="color: rgba(0,0,0,0.5); font-size: 12px;">(отметьте вуз или укажите филиал), форму и основу обучения, укажите учебную группу)</i></p>
+      <div class="flex">
+        <input type="checkbox" {% if application.programs[0].university == "Москва" %} checked {% endif %}>
+        <span>Московский политех</span>
+        <input type="checkbox" style="margin-left: 5px" {% if application.programs[0].university != "Москва" %} checked {% endif %}>
+        <span>Филиал в г. </span>
+        <div class="input-underline">{% if application.programs[0].university != "Москва" %} application.programs[0].university {% endif %}</div>
+      </div>
+      <table style="width: 100%;">
+        <thead>
+          <td class="bold">Форма обучения</td>
+          <td class="bold">Основа обучения</td>
+          <td class="bold">
+            <div class="flex flex-column">
+              <span>Учебная группа и</span>
+              <span> номер зачетной книжки</span>
+            </div>
+          </td>
+        </thead>
+        <tbody >
+          <tr>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == "Очная" %} checked {% endif %}>
+              <span>очная</span>
+            </td>
+            <td>
+              <input type='checkbox' {% if application.programs[0].base == "Бюджетная" %} checked {% endif %}>
+              <span>бюджетная</span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == "Очно-заочная" %} checked {% endif %}>
+              <span>очно-заочная</span>
+            </td>
+            <td>
+              <Input type='checkbox' {% if application.programs[0].base == "Платная" %} checked {% endif %}>
+              <span>платно-договорна</span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <input type='checkbox' {% if application.programs[0].form == "Заочная" %} checked {% endif %}>
+              <span>заочная</span>
+            </td>
+            <td></td>
+            <td class="flex" style="padding-right: 10%;">
+              <div class="input-underline">{{ user.group }}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table> 
+
+      <table>
+        <thead>
+          <tr>
+            <td style="padding: 0 5px"><span class="bold">Год поступления, год отчисления</span></td>
+            <td style="padding: 0 5px"><span class="bold">Направление/специальность подготовки </span><i style="color: rgba(0,0,0,0.75)">(полностью)</i></td>
+            <td style="padding: 0 5px"><span class="bold">Профиль направления/ специализация </span><i style="color: rgba(0,0,0,0.75)">(полностью)</i></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline">{{ application.begin_year }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline">{{ application.programs[0].okso }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline">{{ application.programs[0].profile }}</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline">{{ application.end_year }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline"></div>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <div class="input-line input-underline"></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+
+
+
+
+
+
+
+
+        <!---->
+        <!-- подписи       -->
+        <!---->
         <div class="flex">
           <div class="flex" style="width: 80%; flex: 2;">
             <p>Ознакомлен, что общежитие предоставляется при наличии свободного жилого фонда после подачи заявки в личном кабинете обучающегося в соответствии с очередностью </p>
@@ -213,7 +260,7 @@
         </div>
         <div class="flex">
           <div class="flex" style="width: 80%; flex: 2;">
-            <p>С положением о заполнении вакантных мест ознакомлен и согласен </p>
+            <span>С положением о заполнении вакантных мест ознакомлен и согласен </span>
           </div>
           <div class="flex flex-column" style="justify-content: end; width: 15%;">
             <div class="input-underline"style='width: 200%;'></div>
@@ -222,7 +269,7 @@
         </div>
         <div class="flex">
           <div class="flex" style="width: 80%; flex: 2;">
-            <p>Подтверждаю отсутствие ограничений, предусмотренных для освоения образовательной программы за счет бюджетных ассигнований</p>
+            <span>Подтверждаю отсутствие ограничений, предусмотренных для освоения образовательной программы за счет бюджетных ассигнований</span>
           </div>
           <div class="flex flex-column" style="justify-content: end; width: 15%;">
             <div class="input-underline"style='width: 200%;'></div>
@@ -259,5 +306,7 @@
         </div>
 
       </div>
+    <hr style="margin-top: 1rem;">
+    <p class="bold" style="font-size: 10px">*, ** - выбирается в случае восстановления для подготовки и прохождения итоговой государственной (итоговой) аттестации</p>
   </body>
 </html>

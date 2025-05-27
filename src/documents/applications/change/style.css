@@ -42,6 +42,14 @@ body input {
   margin: auto;
 }
 
+.m-0 {
+  margin: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
 .t-indent {
   text-indent: 2em;
 }
@@ -135,12 +143,22 @@ input[type="checkbox"]:not([checked]) {
 }
 
 
-thead td {
-  vertical-align: top;
+.underline-span {
+  display: inline-block;
+  border-bottom: 1px solid black;
+  min-width: 50px;
+  padding: 2px;
+  word-break: break-word;
+}
+
+table {
+  margin-right: auto;
 }
 
 td {
-  padding: 0;
+  vertical-align: middle;
+  padding-left: 0;
+  padding-right: 10px;
 }
 
 td input {

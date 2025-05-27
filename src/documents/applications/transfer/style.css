@@ -133,16 +133,3 @@ input[type="checkbox"]:not([checked]) {
   background-color: #fff;
   display: inline-block;
 }
-
-
-thead td {
-  vertical-align: top;
-}
-
-td {
-  padding: 0;
-}
-
-td input {
-  margin: auto 0;
-}
