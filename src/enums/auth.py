@@ -23,3 +23,8 @@ class PermissionsEnum(StrEnum):
     canChangeApplicationStatus = auto()
     canViewStuffComments = auto()
     canCreateStuffComments = auto()
+
+    # debug
+    canUpdateTokens = auto()
+    canViewRefreshTokens = auto()
+    canViewApplicationTypeChooseModel = auto()
