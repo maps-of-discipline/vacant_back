@@ -26,5 +26,5 @@ class PermissionsEnum(StrEnum):
 
     # debug
     canUpdateTokens = auto()
-    canViewRefreshTokens = auto()
+    canViewJWTToken = auto()
     canViewApplicationTypeChooseModel = auto()
