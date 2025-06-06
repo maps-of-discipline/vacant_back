@@ -28,3 +28,4 @@ class PermissionsEnum(StrEnum):
     canUpdateTokens = auto()
     canViewJWTToken = auto()
     canViewApplicationTypeChooseModel = auto()
+    canDeleteApplications = auto()

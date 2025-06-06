@@ -37,7 +37,7 @@ async def sessionmaker():
         raise
     finally:
         await session.commit()
-        
+        await session.close()
 
 
 class BaseModel(DeclarativeBase):
