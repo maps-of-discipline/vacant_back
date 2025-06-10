@@ -13,6 +13,7 @@ class PermissionsEnum(StrEnum):
     canViewUserComments = auto()
     canCreateSelfApplication = auto()
     canEditOwnApplications = auto()
+    canViewProfile = auto()
 
     # stuff
     canViewApplicationsList = auto()
