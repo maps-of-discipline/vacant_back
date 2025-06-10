@@ -1,100 +1,136 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Обновление статуса заявки</title>
-  </head>
-  <body style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #000000; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #ffffff; border: 1px solid #dddddd; padding: 30px; width: 100%;">
-      <tr>
-        <td align="center" style="padding-bottom: 20px; border-bottom: 2px solid #000000;">
-          <img src="https://i.ibb.co/CpjgD4pY/logo-black.png" alt="Логотип университета" style="max-height: 70px; margin-bottom: 15px;" />
-          <h1 style="color: #000000; margin-bottom: 5px; font-weight: 500; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Обновление статуса Заявления</h1>
-        </td>
-      </tr>
-      
-      <tr>
-        <td style="padding-top: 20px;">
-          <p style="margin: 10px 0; font-size: 16px;">Уважаемый(ая) <strong>{{ user_name }}</strong>,</p>
-          <p style="margin: 10px 0; font-size: 16px;">Статус вашего заявления на <strong>{{ application_type }}</strong> был обновлен.</p>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          {% if status_class == "new" %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #e3f2fd; color: #0d47a1;">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Обновление статуса заявки</title>
+</head>
+
+<body
+  style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #000000; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%"
+    style="background-color: #ffffff; border: 1px solid #dddddd; padding: 30px; width: 100%;">
+    <tr>
+      <td align="center" style="padding-bottom: 20px; border-bottom: 2px solid #000000;">
+        <img src="https://admin.kd.mospolytech.ru/mospolytech_logo.png" alt="Логотип университета"
+          style="max-height: 70px; margin-bottom: 15px;" />
+        <h1
+          style="color: #000000; margin-bottom: 5px; font-weight: 500; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+          Обновление статуса Заявления</h1>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding-top: 20px;">
+        <p style="margin: 10px 0; font-size: 16px;">Уважаемый(ая) <strong>{{ user_name }}</strong>,</p>
+        <p style="margin: 10px 0; font-size: 16px;">Статус вашего заявления на <strong>{{ application_type }}</strong>
+          был обновлен.</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        {% if status_class == "new" %}
+        <div
+          style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #e3f2fd; color: #0d47a1;">
           {% elif status_class == "in-progres" %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #fff8e1; color: #ff8f00;">
-          {% elif status_class == "approved" %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #e8f5e9; color: #2e7d32;">
-          {% elif status_class == "rejected" %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #ffebee; color: #c62828;">
-          {% elif status_class == "needs-correction" %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #fff3e0; color: #e65100;">
-          {% else %}
-            <div style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #f5f5f5; color: #333;">
-          {% endif %}
-            Новый статус: {{ status_verbose_name }}
-          </div>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          {% if status == "needs_correction" %}
-            <table width="100%" style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
-              <tr><td>
-                <p style="margin: 10px 0; font-size: 16px;">Пожалуйста, ознакомьтесь с замечаниями и внесите необходимые исправления в ваше заявление как можно скорее.</p>
-                <div style="text-align: center; margin: 25px 0;">
-                  <a href="https://vm.mospolytech.ru" style="display: inline-block; background-color: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; margin-top: 15px; font-weight: bold; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px;">Редактировать заявку</a>
-                </div>
-              </td></tr>
-            </table>
-          {% endif %}
-          
-          {% if status == "approved" %}
-            <table width="100%" style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
-              <tr><td>
-                <p style="margin: 10px 0; font-size: 16px;">Поздравляем! Ваше заявление одобрено!</p>
-              </td></tr>
-            </table>
-          {% endif %}
-          
-          {% if status == "rejected" %}
-            <table width="100%" style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
-              <tr><td>
-                <p style="margin: 10px 0; font-size: 16px;">К сожалению, ваше заявление было отклонено. Если у вас есть вопросы по этому решению, пожалуйста, обратитесь в приемную комиссию.</p>
-              </td></tr>
-            </table>
-          {% endif %}
-          
-          {% if status == "in_progres" %}
-            <table width="100%" style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
-              <tr><td>
-                <p style="margin: 10px 0; font-size: 16px;">Ваше заявление в настоящее время находится на рассмотрении. Мы уведомим вас при появлении новой информации.</p>
-              </td></tr>
-            </table>
-          {% endif %}
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          <p style="margin: 10px 0; font-size: 16px;">Вы можете просмотреть детали вашего заявления, нажав на кнопку ниже:</p>
-          <div style="text-align: center; margin: 25px 0;">
-            <a href="https://vm.mospolytech.ru" style="display: inline-block; background-color: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; margin-top: 15px; font-weight: bold; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px;">Просмотреть заявление</a>
-          </div>
-        </td>
-      </tr>
-      
-      <tr>
-        <td style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #dddddd; font-size: 13px; color: #000000; text-align: center;">
-          <p style="margin: 10px 0;">© Московский политехнический университет, 2025</p>
-          <p style="margin: 10px 0;">Это автоматическое уведомление, пожалуйста, не отвечайте на него.</p>
-        </td>
-      </tr>
-    </table>
-  </body>
+          <div
+            style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #fff8e1; color: #ff8f00;">
+            {% elif status_class == "approved" %}
+            <div
+              style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #e8f5e9; color: #2e7d32;">
+              {% elif status_class == "rejected" %}
+              <div
+                style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #ffebee; color: #c62828;">
+                {% elif status_class == "needs-correction" %}
+                <div
+                  style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #fff3e0; color: #e65100;">
+                  {% else %}
+                  <div
+                    style="display: block; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin: 15px 0; text-align: center; width: 100%; box-sizing: border-box; background-color: #f5f5f5; color: #333;">
+                    {% endif %}
+                    Новый статус: {{ status_verbose_name }}
+                  </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        {% if status == "needs_correction" %}
+        <table width="100%"
+          style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
+          <tr>
+            <td>
+              <p style="margin: 10px 0; font-size: 16px;">Пожалуйста, ознакомьтесь с замечаниями и внесите необходимые
+                исправления в ваше заявление как можно скорее.</p>
+              <div style="text-align: center; margin: 25px 0;">
+                <a href="https://vm.mospolytech.ru"
+                  style="display: inline-block; background-color: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; margin-top: 15px; font-weight: bold; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px;">Редактировать
+                  заявку</a>
+              </div>
+            </td>
+          </tr>
+        </table>
+        {% endif %}
+
+        {% if status == "approved" %}
+        <table width="100%"
+          style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
+          <tr>
+            <td>
+              <p style="margin: 10px 0; font-size: 16px;">Поздравляем! Ваше заявление одобрено!</p>
+            </td>
+          </tr>
+        </table>
+        {% endif %}
+
+        {% if status == "rejected" %}
+        <table width="100%"
+          style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
+          <tr>
+            <td>
+              <p style="margin: 10px 0; font-size: 16px;">К сожалению, ваше заявление было отклонено. Если у вас есть
+                вопросы по этому решению, пожалуйста, обратитесь в приемную комиссию.</p>
+            </td>
+          </tr>
+        </table>
+        {% endif %}
+
+        {% if status == "in_progres" %}
+        <table width="100%"
+          style="background-color: #ffffff; padding: 20px; margin: 20px 0; border-left: 4px solid #000000;">
+          <tr>
+            <td>
+              <p style="margin: 10px 0; font-size: 16px;">Ваше заявление в настоящее время находится на рассмотрении. Мы
+                уведомим вас при появлении новой информации.</p>
+            </td>
+          </tr>
+        </table>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p style="margin: 10px 0; font-size: 16px;">Вы можете просмотреть детали вашего заявления, нажав на кнопку ниже:
+        </p>
+        <div style="text-align: center; margin: 25px 0;">
+          <a href="https://vm.mospolytech.ru"
+            style="display: inline-block; background-color: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; margin-top: 15px; font-weight: bold; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px;">Просмотреть
+            заявление</a>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td
+        style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #dddddd; font-size: 13px; color: #000000; text-align: center;">
+        <p style="margin: 10px 0;">© Московский политехнический университет, 2025</p>
+        <p style="margin: 10px 0;">Это автоматическое уведомление, пожалуйста, не отвечайте на него.</p>
+      </td>
+    </tr>
+  </table>
+</body>
+
 </html>
