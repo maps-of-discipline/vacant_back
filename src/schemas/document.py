@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
 from src.enums import DocumnetTypeEnum
@@ -12,3 +14,7 @@ class CreateDocumentSchema(BaseModel):
 class DocumentSchema(CreateDocumentSchema):
     id: int
 
+
+class GetTransferCertificateSchemaRequest(BaseModel):
+    application_id: int
+    program_type: Literal['first', 'second']

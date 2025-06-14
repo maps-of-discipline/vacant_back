@@ -64,3 +64,30 @@ class MapsAupInfo(BaseModel):
     id_form: int
     year_beg: int
     period_educ: str
+
+
+class AllMapsDirection(BaseModel):
+    name: str
+    okco_code: str
+    okco_name: str
+    code: str
+    year: int
+    form_educ: int
+    sem_count: int
+    is_delete: bool
+
+
+class AllMapsFaculty(BaseModel):
+    faculty_id: int
+    faculty_name: str
+    directions: list[AllMapsDirection]
+
+
+class AllMapsResponse(BaseModel):
+    faculties: list[AllMapsFaculty]
+
+    def get_direction_by_num(self, num: str) -> AllMapsDirection:
+        for faculty in self.faculties:
+            for direction in faculty.directions:
+                if direction.code == num:
+                    return direction

@@ -2,7 +2,7 @@ from dataclasses import asdict
 import json
 import httpx
 from src.exceptions.general import BadRequest
-from src.gateways.dto.maps import RupData, MapsAupInfo
+from src.gateways.dto.maps import RupData, MapsAupInfo, AllMapsResponse
 from src.schemas.rups import GetRupDataSchema
 from src.settings import settings
 from src.logger import get_logger
@@ -37,3 +37,7 @@ class MapsAPIGateway:
         response = await self.client.get(f"/map/{aup_num}")
         print(response.json()['info'])
         return MapsAupInfo.model_validate(response.json()['info'])
+
+    async def get_all_maps(self) -> AllMapsResponse:
+        response = await self.client.get('/getAllMaps')
+        return AllMapsResponse.model_validate({"faculties": response.json()})

@@ -4,7 +4,6 @@ from docxtpl import DocxTemplate
 from math import floor
 
 from src.schemas.user import UserSchema
-from src.schemas.applications.application import ApplicationForListViewSchema
 from src.schemas.rups import GetRupDataResponseSchema
 from src.models import Program
 from src.gateways.dto.maps import MapsAupInfo
@@ -16,7 +15,6 @@ degree_level = {
     4: "Специалитет",
     5: "Аспирантура",
 }
-
 
 
 class SolutionRenderer:
