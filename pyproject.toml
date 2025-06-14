@@ -24,6 +24,7 @@ dependencies = [
     "jinja2 (>=3.1.6,<4.0.0)",
     "weasyprint (>=65.1,<66.0)",
     "pdfkit (>=1.0.0,<2.0.0)",
+    "docxtpl (>=0.20.0,<0.21.0)",
 ]
 
 [tool.poetry]

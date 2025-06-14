@@ -50,3 +50,17 @@ class RupData(BaseModel):
     same: list[MapsRupDiscipline]
     similar: list[MapsRupDiscipline]
     best_match: dict[str, BestMatchValue]
+
+
+class MapsAupInfo(BaseModel):
+    id_aup: int
+    num_aup: str
+    base: str
+    id_faculty: int
+    type_educ: str
+    qualification: str
+    id_department: int
+    id_degree: int
+    id_form: int
+    year_beg: int
+    period_educ: str

@@ -147,3 +147,7 @@ class ApplicationRepository:
         return StatusSchema(
             id=status_.id, title=status_.title, verbose_name=status_.verbose_name
         )
+
+
+    async def get_raw(self, application_id: int) -> Application:
+        return await self.session.scalar(select(Application).where(Application.id == application_id))

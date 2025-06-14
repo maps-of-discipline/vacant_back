@@ -2,7 +2,7 @@ from dataclasses import asdict
 import json
 import httpx
 from src.exceptions.general import BadRequest
-from src.gateways.dto.maps import RupData
+from src.gateways.dto.maps import RupData, MapsAupInfo
 from src.schemas.rups import GetRupDataSchema
 from src.settings import settings
 from src.logger import get_logger
@@ -32,3 +32,8 @@ class MapsAPIGateway:
             raise BadRequest("Error occured during handling maps http request.")
 
         return RupData.model_validate(response.json())
+
+    async def get_aup_info(self, aup_num: str) -> MapsAupInfo:
+        response = await self.client.get(f"/map/{aup_num}")
+        print(response.json()['info'])
+        return MapsAupInfo.model_validate(response.json()['info'])

@@ -1,11 +1,12 @@
 import urllib.parse
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Body
 
 from src.schemas.user import UserSchema
 from src.services.documents import DocumentService
+from src.services.solution import  SolutionService
 from src.services.auth import PermissionRequire as Require
 from src.enums import PermissionsEnum as p
-
+from src.schemas.solution import GetSolutionRequestSchema
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -83,3 +84,27 @@ async def generate_change_document(
         media_type="application/octet-stream",
         headers=headers,
     )
+
+
+@router.get("/solution")
+async def generate_solution_document(
+    data: GetSolutionRequestSchema = Depends(),
+    service: SolutionService = Depends(),
+):
+    file, filename = await service.get_solution(data)
+
+    encoded_filename = urllib.parse.quote(filename)
+    content_disposition = f"attachment; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
+    pdf_bytes = file.getvalue()
+
+    headers = {
+        "Content-Disposition": content_disposition,
+        "Access-Control-Expose-Headers": "Content-Disposition",
+    }
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/octet-stream",
+        headers=headers,
+    )
+
