@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Body, Depends
 from src.gateways.dto.maps import RupData
 from src.logger import get_logger
-from src.schemas.rups import GetRupDataResponseSchema, GetRupDataSchema, SetChoosenRequestSchema
+from src.schemas.rups import (
+    GetRupDataResponseSchema,
+    GetRupDataSchema,
+    SetChoosenRequestSchema,
+)
 from src.schemas.status import StatusGetListSchema
 from src.services.rups import RupService
 

@@ -1,0 +1,29 @@
+FROM python:3.13-slim
+
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y gcc libpq-dev \
+    libpango-1.0-0 libpangoft2-1.0-0 gir1.2-harfbuzz-0.0 && \
+    apt clean && \
+    rm -rf /var/cache/apt/*
+
+# Install poetry
+RUN pip install --no-cache-dir poetry && poetry self add poetry-plugin-export
+
+WORKDIR /app
+
+# Copy only files needed to install dependencies first
+COPY pyproject.toml poetry.lock* /app/
+
+# Export requirements and install
+RUN poetry export -f requirements.txt --without-hashes --output requirements.txt && \
+    pip install -r requirements.txt && \
+    pip install uvicorn[standard]
+
+# Copy the rest of the code
+COPY . /app/
+
+# Expose port
+EXPOSE 8000
+
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

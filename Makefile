@@ -1,13 +1,22 @@
-VENV=.venv
-UVICORN=$(VENV)\bin\uvicorn
-UNIX_UVICORN=$(VENV)/bin/uvicorn
+VENV ?= .venv
 
+# Определение пути к uvicorn в зависимости от ОС
+ifeq ($(OS),Windows_NT)
+    UVICORN := $(VENV)\Scripts\uvicorn.exe
+else
+    UVICORN := $(VENV)/bin/uvicorn
+endif
 
-.PHONY: run
+UNIX_UVICORN := $(VENV)/bin/uvicorn
+
+UVICORN_ARGS := "src.main:app" --host localhost --port 8000 --reload
+
+.PHONY: run urun
+
+## Запуск с учетом текущей ОС
 run:
-	$(UVICORN) "src.main:app" --host localhost --port 8000 --reload
-	
-	
-.PHONY: urun
+	$(UVICORN) $(UVICORN_ARGS)
+
+## Явный запуск Unix-версии (например, в WSL или CI)
 urun:
-	$(UNIX_UVICORN) "src.main:app" --host localhost --port 8000 --reload
+	$(UNIX_UVICORN) $(UVICORN_ARGS)
