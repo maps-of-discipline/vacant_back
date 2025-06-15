@@ -17,13 +17,13 @@ from src.schemas.solution import GetSolutionRequestSchema
 
 class SolutionService:
     def __init__(
-            self,
-            renderer: SolutionRenderer = Depends(),
-            application_repo: ApplicationRepository = Depends(),
-            maps_gateway: MapsAPIGateway = Depends(),
-            rup_service: RupService = Depends(),
-            user_repo: UserRepository = Depends(),
-            program_repo: ProgramRepository = Depends(),
+        self,
+        renderer: SolutionRenderer = Depends(),
+        application_repo: ApplicationRepository = Depends(),
+        maps_gateway: MapsAPIGateway = Depends(),
+        rup_service: RupService = Depends(),
+        user_repo: UserRepository = Depends(),
+        program_repo: ProgramRepository = Depends(),
     ):
         self._renderer = renderer
         self._application_repo = application_repo
@@ -43,24 +43,28 @@ class SolutionService:
 
         programs = await self._program_repo.get_by_application_id(application.id)
         source: Program = list(filter(lambda el: el.type == "current", programs))[0]
-        target: Program = list(filter(lambda el: el.type == data.program_type, programs))[0]
+        target: Program = list(
+            filter(lambda el: el.type == data.program_type, programs)
+        )[0]
 
-        rup_data = await self._rup_service.get_rup_data(GetRupDataSchema.model_validate(
-            {
-                "source": {
-                    "num": source.profile,
-                    "sem": source.sem_num,
-                },
-                "target": {
-                    "num": target.profile,
-                    "sem": target.sem_num,
-                },
-            }
-        ))
+        rup_data = await self._rup_service.get_rup_data(
+            GetRupDataSchema.model_validate(
+                {
+                    "source": {
+                        "num": source.profile,
+                        "sem": source.sem_num,
+                    },
+                    "target": {
+                        "num": target.profile,
+                        "sem": target.sem_num,
+                    },
+                }
+            )
+        )
 
         aup_info = await self._maps_gateway.get_aup_info(target.profile)
 
-        file, filename = self._renderer.solution(
+        file = self._renderer.solution(
             user=user,
             application_type=application.type,
             rup_data=rup_data,
@@ -68,5 +72,7 @@ class SolutionService:
             aup_info=aup_info,
             target=target,
         )
+
+        filename = f"{user.shotname} решение по ЗВМ.docx"
 
         return file, filename
