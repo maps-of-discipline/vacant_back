@@ -18,7 +18,7 @@ RUN mkdir /wheels
 
 COPY pyproject.toml poetry.lock* /app/
 
-RUN poetry export -f requirements.txt --output /wheels/requirements.txt \
+RUN poetry export -f requirements.txt --without-hashes --output /wheels/requirements.txt \
   && pip wheel --no-deps --wheel-dir=/wheels -r /wheels/requirements.txt \
   && pip wheel --no-deps --wheel-dir=/wheels uvicorn
 
@@ -29,9 +29,9 @@ WORKDIR /app
 COPY --from=builder /wheels /wheels
 
 RUN apt-get update && apt-get install -y gcc libpq-dev \
-    libpango-1.0-0 libpangoft2-1.0-0 gir1.2-harfbuzz-0.0 && \
-    apt clean && \
-    rm -rf /var/cache/apt/*
+  libpango-1.0-0 libpangoft2-1.0-0 gir1.2-harfbuzz-0.0 && \
+  apt clean && \
+  rm -rf /var/cache/apt/*
 
 
 RUN pip install --no-cache-dir --no-index --find-links=/wheels uvicorn \
