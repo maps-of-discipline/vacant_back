@@ -9,7 +9,7 @@ class MapsRupDiscipline(BaseModel):
     title: str
     period: int
     zet: float
-    control: str
+    control: str | None
     coursework: bool
     amount: float
     elective_group: int | None = Field(default=None)
