@@ -37,7 +37,6 @@ class DisciplineRepository:
             value["program_id"] = program_id
             values.append(value)
 
-
         stmt = insert(Discipline).values(values).returning(Discipline)
         return [el[0] for el in await self.session.execute(stmt)]
 
@@ -59,6 +58,7 @@ class DisciplineRepository:
             variant_associations.append(association_object)
 
         self.session.add_all(variant_associations)
+        await self.session.commit()
 
     async def delete_by_program_id(self, program_id: int) -> None:
         stmt = delete(Discipline).where(Discipline.program_id == program_id)
